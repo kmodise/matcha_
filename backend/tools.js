@@ -1,5 +1,5 @@
 module.exports = {
-    getnotifs: function (conn, id, callback) {
+    myNotifications: function (conn, id, callback) {
         conn.query('SELECT * FROM notifs WHERE user_id = ? ORDER BY date DESC LIMIT 20', [id], function (err, notifs) {
             if (err) throw err
             if (notifs.length == 0)

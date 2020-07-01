@@ -13,18 +13,9 @@ var users = `CREATE TABLE IF NOT EXISTS users ( \
     age INT DEFAULT 0, \
     bio TEXT, \
     score INT DEFAULT 0 ,\
-    longitude DOUBLE, \
-    latitude DOUBLE, \
-    location TEXT, \
     orientation VARCHAR(255), \
-    checklocation INT DEFAULT 1,\
     active DATETIME,\
-    fakelocation TEXT, \ 
-    img1 VARCHAR(255) DEFAULT '/img/empty.jpg', \
-    img2 VARCHAR(255) DEFAULT '/img/empty.jpg', \
-    img3 VARCHAR(255) DEFAULT '/img/empty.jpg', \
-    img4 VARCHAR(255) DEFAULT '/img/empty.jpg', \
-    api INT )`
+    img1 VARCHAR(255) DEFAULT '/img/empty.jpg')`
 conn.query(users, function (err, res) { if (err) throw err })
 
 
@@ -71,8 +62,18 @@ var notifs = `CREATE TABLE IF NOT EXISTS notifs (\
     his_id INT NOT NULL)`
 conn.query(block, function (err) { if (err) throw err }) 
 
-var report = `CREATE TABLE IF NOT EXISTS report (\
-    id INT AUTO_INCREMENT PRIMARY KEY, \
-    user_id INT NOT NULL, \ 
-    his_id INT NOT NULL)`
-conn.query(report, function (err) { if (err) throw err }) 
+// var report = `CREATE TABLE IF NOT EXISTS report (\
+//     id INT AUTO_INCREMENT PRIMARY KEY, \
+//     user_id INT NOT NULL, \ 
+//     his_id INT NOT NULL)`
+// conn.query(report, function (err) { if (err) throw err }) 
+
+
+
+
+
+
+
+
+
+

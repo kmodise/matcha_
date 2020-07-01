@@ -1,0 +1,27 @@
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+var socket = io('http://localhost:3000');
+
+
+<% if (Array.isArray(notif) == false) { %>
+var id = <%- notif %> ;
+<% } else { %>
+var id = <%- notif[0].user_id %> ;
+<% }  %>
+
+socket.on('connect', function (data) {
+    socket.emit('setUserId', id)
+
+});
+socket.on('notification', function (data) {
+
+    $('.dot').addClass('btn-primary').removeClass('btn-secondary');
+
+   
+    $('#notifbox').prepend('<a href="/user_profile/' + data.his_id + '" style="text-decoration: none;"><div class=notifunseen><p>' + data.not + '</p><time class="timeago"> ' + data.date + '</time></div></a><hr />');
+    $('.historylikes').prepend('<a class="text-center" href="/user_profile/' + data.his_id + '" style="text-decoration: none;"><div class=notifunseen><p>' + data.not + '</p><time class="timeago"> ' + data.date + '</time></div></a><hr/>');
+});
+
+$("time.timeago").timeago();
+</script>

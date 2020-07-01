@@ -55,7 +55,7 @@ app.use(express.static('public'))
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(session({
-    secret: 'keyboard cat',
+    secret: 'secret',
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }
@@ -106,12 +106,12 @@ app.get('/', (req, res) => {
     .get('/confirm', function (req, res) {
         eval(fs.readFileSync(__dirname + "/backend/confirm.js") + '')
     })
-    .all('/find', urlencodedParser, function (req, res) {
+    .all('/loveField', urlencodedParser, function (req, res) {
         if (req.session.profile == undefined)
             res.redirect('/')
         else {
-            tool.getnotifs(conn, req.session.profile.id, function (notifs) {
-            eval(fs.readFileSync(__dirname + "/backend/find.js") + '')})
+            tool.myNotifications(conn, req.session.profile.id, function (notifs) {
+            eval(fs.readFileSync(__dirname + "/backend/loveField.js") + '')})
         }
     })
 
@@ -125,9 +125,9 @@ app.get('/', (req, res) => {
         res.render('pages/public_profile.ejs', { y: y, geopoint: geopoint, tag: req.session.profile.tag, w: w, req: req, profile: req.session.profile, like: -1, online: 1 })
     })
 
-    .get('/matchs', function (req, res) {
-        tool.getnotifs(conn, req.session.profile.id, function (notifs) {
-        eval(fs.readFileSync(__dirname + "/backend/matchs.js") + '')})
+    .get('/myMatch', function (req, res) {
+        tool.myNotifications(conn, req.session.profile.id, function (notifs) {
+        eval(fs.readFileSync(__dirname + "/backend/myMatch.js") + '')})
     })
 
     .get('/chat/:id', function (req, res) {
@@ -141,7 +141,7 @@ app.get('/', (req, res) => {
                     if (match == 0)
                         res.redirect('/')
                     else {
-                        tool.getnotifs(conn, req.session.profile.id, function(notifs){
+                        tool.myNotifications(conn, req.session.profile.id, function(notifs){
                     res.render('pages/chat', { req: req, user2: user2[0], chat: chat, notif: notifs})
                 })
             }
@@ -174,24 +174,21 @@ app.post('/', (req, res) => {
     })
 
 app.all('/profile', urlencodedParser, function (req, res) {
-    tool.getnotifs(conn, req.session.profile.id, function (notifs) {
+    tool.myNotifications(conn, req.session.profile.id, function (notifs) {
         eval(fs.readFileSync(__dirname + "/backend/profile.js") + '')
     })
 })
-    .post('/new_img', function (req, res) {
-        tool.getnotifs(conn, req.session.profile.id, function(notifs){
-        eval(fs.readFileSync(__dirname + "/backend/new_img.js") + '')
+    .post('/profilePic', function (req, res) {
+        tool.myNotifications(conn, req.session.profile.id, function(notifs){
+        eval(fs.readFileSync(__dirname + "/backend/profilePic.js") + '')
         })
     })
     .all('/user_profile/:id', urlencodedParser, function (req, res) {
-        tool.getnotifs(conn, req.session.profile.id, function(notifs){
+        tool.myNotifications(conn, req.session.profile.id, function(notifs){
         eval(fs.readFileSync(__dirname + "/backend/public_profile.js") + '')
         })
     })
 
-    .all('*', function (req, res) {
-        res.redirect('/');
-    })
 
 
 

@@ -1,13 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <% include ../extras/head.ejs %>
 </head>
-<body>
-    <p>UPCOMING FEATURE</p>
-    <a href="./matchs.ejs">GO BACK!!!  NOW!!!!!!!!!!! :-[</a>
+
+<body id="">
+        <% include ../extras/navbar.ejs %>
+
+    <div class="container">
+        <div id="chatZone">
+            <%
+            var i = 0;
+            while (chat[i]) { %>
+            <% if ((chat[i].user_id == req.session.profile.id && chat[i].his_id == user2.id) || (chat[i].user_id == user2.id && chat[i].his_id == req.session.profile.id)) { %>
+
+            <% if (chat[i].user_id == req.session.profile.id) { %>
+                <div class="my_message">
+
+                    <p><%- req.session.profile.username %>
+                            <% } else { %>
+                            
+                                <div class="receivedMessage">
+                                    <p><%- user2.username %>
+                                            <% } %>
+                                            <%- ' : ' %><%- chat[i].message %></p>
+                                </div>
+                                
+                            </div>
+                            <% } i++; } %>
+
+
+                <form id="messageBox" class="messageBox" >
+                    <input type="text" id="MessageInput">
+                    <button  type="submit" >Send</button>
+                </form>
+            </div>
+
+
 </body>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+<script type="text/javascript">
+
+     
+    var socket = io.connect('http://localhost:3000');
+
+    var pseudo = "<%-req.session.profile.username %>";
+    user_id = "<%-req.session.profile.id %>";
+    his_id = "<%-req.params.id %>";
+    if (user_id > his_id){
+        var room = user_id + his_id;
+    }
+    else{
+         var room = his_id + user_id;
+    }
+       
+
+      
+    socket.emit('room', user_id, his_id);
+    document.title = 'Chatting - ' + document.title;
+
+    socket.emit('nouveau_client', pseudo, user_id, his_id);
+
+    socket.on('message', function (data) {
+        var mylogin = "<%- req.session.profile.username %>";
+        if (mylogin != data.pseudo)
+            PrintRecievedMessage(data.pseudo, data.message);
+        
+    })
+
+
+    socket.on('nouveau_client', function (pseudo) {
+        $('#chatZone').append('<div><p class="text-secondary"><em>' + pseudo + ' a rejoint le Chat !</em></p></div>');
+        
+    })
+
+
+
+    var sendContainer = document.getElementById('messageBox')
+    var messageInput = document.getElementById('MessageInput')
+
+    sendContainer.addEventListener('submit', (e) => {
+        e.preventDefault()
+        var message = messageInput.value
+        
+        socket.emit('message', message, room)
+        PrintMyMessage(pseudo, message);
+        
+        messageInput.value = ''
+    })
+
+    
+    function PrintRecievedMessage(pseudo, message) {
+        $('#chatZone').append('<div class="receivedMessage"><p>' + pseudo + ' -->  ' + message + '</p></div>');
+    }
+
+    function PrintMyMessage(pseudo, message) {
+        $('#chatZone').append('<div class="my_message" ><p >' + pseudo + ' :  -->' + message + '</p></div>');
+    }
+
+
+
+</script>
+
+
+
+<% include ../extras/footer.ejs %>
+
 </html>

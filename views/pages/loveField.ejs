@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <% include ../extras/head.ejs %>
+</head>
+
+<%
+var i = 0; while (users[i]) {
+
+i++;
+
+}
+
+%>
+
+<body>
+    <% include ../extras/navbar.ejs %>
+
+
+  <div>
+
+    <div>
+      <div>
+        <div>
+          <% var i = 0; while (users[i]) { %>
+          <div>
+            <div onclick="location.href='<%-'/user_profile/' + users[i].id%>'">
+              <img src="<%- users[i].img1 %>">
+              <div>
+                <p><%-users[i].age%>years</p>
+                <h5><%- users[i].name%></h5>
+                <p><%- users[i].bio%></p>
+              </div>
+            </div>
+          </div>
+        <% i++; } %>
+      </div>
+    </div>
+  </div>
+
+  <% include ../extras/footer.ejs %>
+</body>
+
+</html>

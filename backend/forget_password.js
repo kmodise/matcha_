@@ -1,4 +1,10 @@
-email = eschtml(req.body.email)
+var nodemailer = require('nodemailer')
+var rand = require("random-key")
+var bcrypt = require('bcrypt')
+
+
+
+email = req.body.email
 sql = 'SELECT * FROM users WHERE email = ?'
     conn.query(sql, [email],
     function (error, result) 
@@ -6,27 +12,27 @@ sql = 'SELECT * FROM users WHERE email = ?'
     if (error) throw error
     if (result.length > 0)
     {
-        let smtpTransport = mailer.createTransport({
+        let smtpTransport = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'matchacolin@gmail.com',
-                pass: 'Matcha1234'
+                user: 'kgosaneli@gmail.com',
+                pass: 'Kmodise@1'
             }
          });
          newpass = rand.generate(10)
          mail = 
         {
-            from: "colinschmitt47@gmail.com", to: email, subject: "Reinitialisation de votre mot de passe",
+            from: "kgosaneli@gmail.com", to: email, subject: "Matcha password resset",
             html: '<html><body><div align=center> \
             YOUR LOGIN : <BR />\
             '+result[0].username+'<BR /><BR />\
-            YOUR NEW PASSWORD : <BR />\
+            NEW PASSWORD : <BR />\
             '+newpass+'<BR />\
             </div></body></html>'
         }
         smtpTransport.sendMail(mail, function(error, response){
             if (error) { 
-                res.render('pages/login', {req: req, error: "Mail not sending"}) 
+                res.render('login', {req: req, error: "Mail failed"}) 
             }
             else {
                 bcrypt.hash(newpass, 10, function(err, hash) { 
@@ -36,12 +42,12 @@ sql = 'SELECT * FROM users WHERE email = ?'
                     function (error, result) 
                     { 
                     if (error) throw error }) })
-                        var msg = "C'est ok chef ton mdp est envoyé par mail"
-                res.render('pages/login', {req: req, success: msg})
+                        var msg = "check your email"
+                res.render('login', {req: req, success: msg})
              }
              smtpTransport.close()})
     }
     else {
-        res.render('pages/login',{req: req})
+        res.render('login',{req: req})
     }
 })

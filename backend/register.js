@@ -54,7 +54,7 @@ if (req.body.username && req.body.firstname && req.body.name && req.body.email &
 
                                     smtpTransport.close()})
                                     bcrypt.hash(password,10,function(err, hash){if (err) throw err
-                                    sql = 'INSERT INTO `users` (`username`, `firstname`, `name`, `email`, `password`,`confirmkey`, `api`) VALUES (?, ?, ?, ?, ?, ?, 1)'
+                                    sql = 'INSERT INTO `users` (`username`, `firstname`, `name`, `email`, `password`,`confirmkey`) VALUES (?, ?, ?, ?, ?, ?)'
                                     variables = [username, firstname, name, email, hash, key]
                                     var promise1 = new Promise(function(resolve, reject) { conn.query(sql, variables, function (err, res) { if (err) throw err }) }) 
                                         

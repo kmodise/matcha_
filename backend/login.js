@@ -2,7 +2,7 @@ if (!req.body.username && !req.body.password)
   res.render('pages/login', {req: req})
 else if (req.body.username && req.body.password)
 {
-    sql = 'SELECT * FROM `users` WHERE username = ? AND api = 1'
+    sql = 'SELECT * FROM `users` WHERE username = ?'
     variables = [req.body.username]
     conn.query(sql, variables, function (err, result) { if (err) throw err
         if (result.length > 0)
@@ -25,7 +25,7 @@ else if (req.body.username && req.body.password)
                         })
                 }
                 else 
-                    res.render('pages/login',{error: "A confirmation email has been"})
+                    res.render('pages/login',{error: "confirm account first"})
                 
             }
                 else 
@@ -36,7 +36,6 @@ else if (req.body.username && req.body.password)
         }
         else 
             res.render('pages/login',{error: "Unknow login"})
-        
     }) 
 
     

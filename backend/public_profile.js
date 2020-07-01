@@ -139,15 +139,6 @@ if (req.body.block)
 			deletefrom('block')
 	})
 }
-if (req.body.report)
-{
-	check('report', req.session.profile.id, req.params.id, function(block){
-		if (block == 0)
-			insertinto('report')
-		else
-			deletefrom('report')
-	})
-}
 
 if ((req.session.profile.id != req.params.id) && !req.body.like && !req.body.dislike)
 	insertinto('visits')
@@ -162,11 +153,11 @@ conn.query('SELECT * FROM users WHERE id = ?', [req.params.id], function (err, r
 			if (err) throw err
 			checklike(req.session.profile.id, req.params.id, function (like) {
 				check('block', req.session.profile.id, req.params.id, function(block){
-					check('report', req.session.profile.id, req.params.id, function(report){
+					
 
 				var online = checkonline();
-				res.render('pages/public_profile', {notif: notifs,report: report, block: block, geopoint: geopoint, req: req, like: like, profile: result[0], tag: resultag, online: online })
-			})})})
+				res.render('pages/public_profile', {notif: notifs, block: block, req: req, like: like, profile: result[0], tag: resultag, online: online })
+			})})
 		})
 	}
 })

@@ -2,45 +2,35 @@
 <html lang="en">
 
 <head>
-    <% include ../others/head.ejs %>
-    <link rel="stylesheet" href="css/signin.css">
+    <% include ../extras/head.ejs %>
 </head>
 
 <body id="form-conn">
-
-        <div id="bg-register"></div>
         <% if (typeof error !== 'undefined' && error && error !== 'none') { 
-            %> <div class="alert alert-danger w-50 ml-auto mr-auto alert-dismissible fade show" role="alert">
-  <%-error%>
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
+            %>
+              <%-error%>
         <% } %>
         <% if (typeof success !== 'undefined' && success && success !== 'none') { 
-            %> <div class="alert alert-success w-50 ml-auto mr-auto alert-dismissible fade show" role="alert">
-  <%-success%>
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+            %>
+              <%-success%>
         <% } %>
-        <section class="container-fluid text-center">
-        <form class="form-signin" action="register" method="post">
-            <input type="username" class='form-control' name=username placeholder="Username" required autofocus>
+        <section>
+        <form style="padding-right: 0%;" action="register" method="post">
+            <input type="username" name=username placeholder="Username" required autofocus>
 
-            <input type="name" class='form-control border-0' name=firstname placeholder="Your firstname" required >
+            <input type="name"  name=firstname placeholder="Your firstname" required >
 
-            <input type="name" class='form-control border-0' name=name placeholder="Your Name" required >
+            <input type="name"  name=name placeholder="Your Name" required >
 
-            <input type="email" class="form-control border-0" name=email placeholder="Email address" required>
+            <input type="email" name=email placeholder="Email address" required>
 
-            <input type="password" class="form-control" name="password" placeholder="Password" required>
-           
-            <button class="btn btn-lg btn-light btn-block" type="submit">Register</button>
-            <p class="txt-register"><a href="/login">Sign-in</a></p>
+            <input type="password" name="password" placeholder="Password" required>
+
+           <p> <button type="submit">Register</button> </p>
+            <p><a href="/login">Sign-in</a></p>
         </form>
     </section>
-        <% include ../others/footer.ejs %>
+        <% include ../extras/footer.ejs %>
     </body>
 
 

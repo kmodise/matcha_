@@ -5,8 +5,8 @@ function updateuser(column, change)
     var sql = 'UPDATE users SET ' + column + ' = ? WHERE id = ?'
     conn.query(sql, [change, req.session.profile.id], function (err) { if (err) throw err })
     req.session.profile[column] = change
-    tool.getlikes(conn, req.session.profile.id, function (like) {
-        tool.getvisits(conn, req.session.profile.id, function (visit) {
+    functions.getlikes(conn, req.session.profile.id, function (like) {
+        functions.getvisits(conn, req.session.profile.id, function (visit) {
             var success = 'image changed';
     res.render('pages/profile',{success: success,profile: req.session.profile, notif: notifs, visit: visit, like: like})})})
 }

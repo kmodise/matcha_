@@ -1,12 +1,12 @@
 
-
+var mailer = require("nodemailer")
 
 if (req.body.username && req.body.firstname && req.body.name && req.body.email && req.body.password){
-    var username = eschtml(req.body.username)
-    var firstname = eschtml(req.body.firstname)
-    var name = eschtml(req.body.name)
-    var email = eschtml(req.body.email)
-    var password = eschtml(req.body.password)
+    var username = escapehtml(req.body.username)
+    var firstname = escapehtml(req.body.firstname)
+    var name = escapehtml(req.body.name)
+    var email = escapehtml(req.body.email)
+    var password = escapehtml(req.body.password)
     var lowerC = /[a-z]/
     var upperC = /[A-Z]/
     if (password.length > 5)
@@ -22,7 +22,7 @@ if (req.body.username && req.body.firstname && req.body.name && req.body.email &
                             if (error) throw error
                             if (result.length == 0)
                             {
-                                let smtpTransport = mailer.createTransport({
+                                let Transport = mailer.createTransport({
                                     service: 'gmail',
                                     auth: {
                                         user: 'kgosaneli@gmail.com',
@@ -40,9 +40,9 @@ if (req.body.username && req.body.firstname && req.body.name && req.body.email &
                                     <a href=http://localhost:3000/confirm?username='+ username + '&key=' + key + '>confirm</a>\
                                     </div></body></html>'
                                 }
-                                smtpTransport.sendMail(mail,function(error, response){
+                                Transport.sendMail(mail,function(error, response){
                                     if (error){
-                                        var msg = "Email error try again"
+                                        var msg = "nodemailer fail"
                                         res.render('pages/register',{error: msg})
                                     }
                                     else {
@@ -52,7 +52,7 @@ if (req.body.username && req.body.firstname && req.body.name && req.body.email &
                                     }
                                     
 
-                                    smtpTransport.close()})
+                                    Transport.close()})
                                     bcrypt.hash(password,10,function(err, hash){if (err) throw err
                                     sql = 'INSERT INTO `users` (`username`, `firstname`, `name`, `email`, `password`,`confirmkey`) VALUES (?, ?, ?, ?, ?, ?)'
                                     variables = [username, firstname, name, email, hash, key]

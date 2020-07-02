@@ -1,6 +1,6 @@
 function checkmatchs(user_id, callback){
     conn.query('SELECT * FROM likes WHERE user_id = ?', [user_id], function (err, row1) { if (err) throw err 
-    conn.query('SELECT * FROM likes WHERE his_id = ?', [user_id], function (err, row2){ if (err) throw err
+    conn.query('SELECT * FROM likes WHERE secondUsrId = ?', [user_id], function (err, row2){ if (err) throw err
     if (row1.length == 0 || row2.length == 0)
         return callback('none');
     var    a = 0; i = 0;
@@ -8,8 +8,8 @@ function checkmatchs(user_id, callback){
     while (row1[a]){
         var b = 0;
         while (row2[b]){
-            if (row1[a].his_id == row2[b].user_id){
-                id[i] = row1[a].his_id;
+            if (row1[a].secondUsrId == row2[b].user_id){
+                id[i] = row1[a].secondUsrId;
                 i++;
             }
             b++;

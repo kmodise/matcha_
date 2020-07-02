@@ -1,41 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <% include ../extras/head.ejs %>
-</head>
 
 <body id="">
         <% include ../extras/navbar.ejs %>
 
-    <div class="container">
-        <div id="chatZone">
-            <%
-            var i = 0;
-            while (chat[i]) { %>
-            <% if ((chat[i].user_id == req.session.profile.id && chat[i].his_id == user2.id) || (chat[i].user_id == user2.id && chat[i].his_id == req.session.profile.id)) { %>
+<div id="chatZone">
+    <%
+    var i = 0;
+    while (chat[i]) { %>
+    <% if ((chat[i].user_id == req.session.profile.id && chat[i].secondUsrId == user2.id) || (chat[i].user_id == user2.id && chat[i].secondUsrId == req.session.profile.id)) { %>
 
-            <% if (chat[i].user_id == req.session.profile.id) { %>
-                <div class="my_message">
+    <% if (chat[i].user_id == req.session.profile.id) { %>
+        <div class="my_message">
 
-                    <p><%- req.session.profile.username %>
-                            <% } else { %>
-                            
-                                <div class="receivedMessage">
-                                    <p><%- user2.username %>
-                                            <% } %>
-                                            <%- ' : ' %><%- chat[i].message %></p>
-                                </div>
-                                
-                            </div>
-                            <% } i++; } %>
+            <p><%- req.session.profile.username %>
+                    <% } else { %>
+                    
+                        <div class="receivedMessage">
+                            <p><%- user2.username %>
+                                    <% } %>
+                                    <%- ' --> ' %><%- chat[i].message %></p>
+                        </div>
+                        
+                    </div>
+                    <% } i++; } %>
 
 
-                <form id="messageBox" class="messageBox" >
-                    <input type="text" id="MessageInput">
-                    <button  type="submit" >Send</button>
-                </form>
-            </div>
+        <form id="messageBox" class="messageBox" >
+            <input type="text" id="MessageInput">
+            <button  type="submit" >Send</button>
+        </form>
+    </div>
 
 
 </body>
@@ -51,33 +47,33 @@
      
     var socket = io.connect('http://localhost:3000');
 
-    var pseudo = "<%-req.session.profile.username %>";
+    var userName = "<%-req.session.profile.username %>";
     user_id = "<%-req.session.profile.id %>";
-    his_id = "<%-req.params.id %>";
-    if (user_id > his_id){
-        var room = user_id + his_id;
+    secondUsrId = "<%-req.params.id %>";
+    if (user_id > secondUsrId){
+        var room = user_id + secondUsrId;
     }
     else{
-         var room = his_id + user_id;
+         var room = secondUsrId + user_id;
     }
        
 
       
-    socket.emit('room', user_id, his_id);
+    socket.emit('room', user_id, secondUsrId);
     document.title = 'Chatting - ' + document.title;
 
-    socket.emit('nouveau_client', pseudo, user_id, his_id);
+    socket.emit('connectedUser', userName, user_id, secondUsrId);
 
     socket.on('message', function (data) {
         var mylogin = "<%- req.session.profile.username %>";
-        if (mylogin != data.pseudo)
-            PrintRecievedMessage(data.pseudo, data.message);
+        if (mylogin != data.userName)
+            PrintRecievedMessage(data.userName, data.message);
         
     })
 
 
-    socket.on('nouveau_client', function (pseudo) {
-        $('#chatZone').append('<div><p class="text-secondary"><em>' + pseudo + ' a rejoint le Chat !</em></p></div>');
+    socket.on('connectedUser', function (userName) {
+        $('#chatZone').append('<div><p class="text-secondary"><em>' + userName + ' is online</em></p></div>');
         
     })
 
@@ -91,18 +87,18 @@
         var message = messageInput.value
         
         socket.emit('message', message, room)
-        PrintMyMessage(pseudo, message);
+        PrintMyMessage(userName, message);
         
         messageInput.value = ''
     })
 
     
-    function PrintRecievedMessage(pseudo, message) {
-        $('#chatZone').append('<div class="receivedMessage"><p>' + pseudo + ' -->  ' + message + '</p></div>');
+    function PrintRecievedMessage(userName, message) {
+        $('#chatZone').append('<div class="receivedMessage"><p>' + userName + ' -->  ' + message + '</p></div>');
     }
 
-    function PrintMyMessage(pseudo, message) {
-        $('#chatZone').append('<div class="my_message" ><p >' + pseudo + ' :  -->' + message + '</p></div>');
+    function PrintMyMessage(userName, message) {
+        $('#chatZone').append('<div class="my_message" ><p >' + userName + ' :  -->' + message + '</p></div>');
     }
 
 

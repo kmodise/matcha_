@@ -10,7 +10,7 @@ module.exports = {
     },
 
     getlikes: function (conn, user_id, callback) {
-        conn.query('SELECT * FROM likes WHERE his_id = ?', [user_id], function (err, row) {
+        conn.query('SELECT * FROM likes WHERE secondUsrId = ?', [user_id], function (err, row) {
             if (err) throw err
             if (row.length == 0)
                 return callback('none')
@@ -29,7 +29,7 @@ module.exports = {
     },
 
     getvisits: function (conn, user_id, callback){
-        conn.query('SELECT * FROM `visits` WHERE his_id = ? ',[user_id], function (err, row) {
+        conn.query('SELECT * FROM `visits` WHERE secondUsrId = ? ',[user_id], function (err, row) {
             if (err) throw err
             if (row.length == 0)
                 return callback('none')
@@ -47,14 +47,14 @@ module.exports = {
             })
             })
         }, 
-        checkmatch: function(con, user_id, his_id, callback)
+        checkmatch: function(con, user_id, secondUsrId, callback)
 {
     var a = 0
     var b = 0
-     con.query('SELECT * FROM likes WHERE user_id = ? AND his_id = ?', [user_id, his_id], function (err, rows) { if (err) throw err 
+     con.query('SELECT * FROM likes WHERE user_id = ? AND secondUsrId = ?', [user_id, secondUsrId], function (err, rows) { if (err) throw err 
         if (rows.length == 1)
             a = 1;       
-        con.query('SELECT * FROM likes WHERE user_id = ? AND his_id = ?', [his_id, user_id], function (err, rows) { if (err) throw err 
+        con.query('SELECT * FROM likes WHERE user_id = ? AND secondUsrId = ?', [secondUsrId, user_id], function (err, rows) { if (err) throw err 
         if (rows.length == 1)
             b = 1;
         if (a == 1 && b == 1)

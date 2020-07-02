@@ -4,20 +4,18 @@ var bodyParser = require('body-parser');
 var session = require('express-session')
 var mysql = require('mysql')
 var fs = require('fs')
-var eschtml = require('htmlspecialchars')
+var escapehtml = require('htmlspecialchars')
 var bcrypt = require('bcrypt')
 var validator = require('validator')
 var mailer = require("nodemailer")
 var rand = require("random-key")
 var xoauth2 = require('xoauth2');
 var html = require('html')
-var geopoint = require('geopoint')
 var formidable = require('formidable')
 http = require("http")
-var geopoint = require('geopoint')
 var server = http.createServer(app);
 var io = require("socket.io").listen(server);
-tool = require("./backend/tools.js")
+functions = require("./backend/functions.js")
 var request = require('request');
 
 
@@ -110,7 +108,7 @@ app.get('/', (req, res) => {
         if (req.session.profile == undefined)
             res.redirect('/')
         else {
-            tool.myNotifications(conn, req.session.profile.id, function (notifs) {
+            functions.myNotifications(conn, req.session.profile.id, function (notifs) {
             eval(fs.readFileSync(__dirname + "/backend/loveField.js") + '')})
         }
     })
@@ -122,11 +120,11 @@ app.get('/', (req, res) => {
 
     .get('/public_profile', function (req, res) {
         var y = 777
-        res.render('pages/public_profile.ejs', { y: y, geopoint: geopoint, tag: req.session.profile.tag, w: w, req: req, profile: req.session.profile, like: -1, online: 1 })
+        res.render('pages/public_profile.ejs', { y: y, tag: req.session.profile.tag, w: w, req: req, profile: req.session.profile, like: -1, online: 1 })
     })
 
     .get('/myMatch', function (req, res) {
-        tool.myNotifications(conn, req.session.profile.id, function (notifs) {
+        functions.myNotifications(conn, req.session.profile.id, function (notifs) {
         eval(fs.readFileSync(__dirname + "/backend/myMatch.js") + '')})
     })
 
@@ -136,12 +134,12 @@ app.get('/', (req, res) => {
         }
         else {
             conn.query("SELECT * from `users` where id = ?", [req.params.id], function( err, user2 ) { if (err) throw err
-                conn.query('SELECT * FROM `chat` WHERE user_id = ? OR his_id = ?', [req.params.id, req.params.id], function (err, chat) { if (err) throw err 
-                tool.checkmatch(conn, req.session.profile.id, req.params.id, function(match){
+                conn.query('SELECT * FROM `chat` WHERE user_id = ? OR secondUsrId = ?', [req.params.id, req.params.id], function (err, chat) { if (err) throw err 
+                functions.checkmatch(conn, req.session.profile.id, req.params.id, function(match){
                     if (match == 0)
                         res.redirect('/')
                     else {
-                        tool.myNotifications(conn, req.session.profile.id, function(notifs){
+                        functions.myNotifications(conn, req.session.profile.id, function(notifs){
                     res.render('pages/chat', { req: req, user2: user2[0], chat: chat, notif: notifs})
                 })
             }
@@ -174,17 +172,17 @@ app.post('/', (req, res) => {
     })
 
 app.all('/profile', urlencodedParser, function (req, res) {
-    tool.myNotifications(conn, req.session.profile.id, function (notifs) {
+    functions.myNotifications(conn, req.session.profile.id, function (notifs) {
         eval(fs.readFileSync(__dirname + "/backend/profile.js") + '')
     })
 })
     .post('/profilePic', function (req, res) {
-        tool.myNotifications(conn, req.session.profile.id, function(notifs){
+        functions.myNotifications(conn, req.session.profile.id, function(notifs){
         eval(fs.readFileSync(__dirname + "/backend/profilePic.js") + '')
         })
     })
     .all('/user_profile/:id', urlencodedParser, function (req, res) {
-        tool.myNotifications(conn, req.session.profile.id, function(notifs){
+        functions.myNotifications(conn, req.session.profile.id, function(notifs){
         eval(fs.readFileSync(__dirname + "/backend/public_profile.js") + '')
         })
     })

@@ -12,7 +12,7 @@ sql = 'SELECT * FROM users WHERE email = ?'
     if (error) throw error
     if (result.length > 0)
     {
-        let smtpTransport = nodemailer.createTransport({
+        let Transport = nodemailer.createTransport({
             service: 'gmail',
             auth: {
                 user: 'kgosaneli@gmail.com',
@@ -23,16 +23,11 @@ sql = 'SELECT * FROM users WHERE email = ?'
          mail = 
         {
             from: "kgosaneli@gmail.com", to: email, subject: "Matcha password resset",
-            html: '<html><body><div align=center> \
-            YOUR LOGIN : <BR />\
-            '+result[0].username+'<BR /><BR />\
-            NEW PASSWORD : <BR />\
-            '+newpass+'<BR />\
-            </div></body></html>'
+            html: '<html><body>  hello '+result[0].username+' here is your new password :  '+newpass+'</body></html>'
         }
-        smtpTransport.sendMail(mail, function(error, response){
+        Transport.sendMail(mail, function(error, response){
             if (error) { 
-                res.render('login', {req: req, error: "Mail failed"}) 
+                res.render('pages/login.ejs', {req: req, error: "Mail failed"}) 
             }
             else {
                 bcrypt.hash(newpass, 10, function(err, hash) { 
@@ -43,11 +38,11 @@ sql = 'SELECT * FROM users WHERE email = ?'
                     { 
                     if (error) throw error }) })
                         var msg = "check your email"
-                res.render('login', {req: req, success: msg})
+                res.render('pages/login.ejs', {req: req, success: msg})
              }
-             smtpTransport.close()})
+             Transport.close()})
     }
     else {
-        res.render('login',{req: req})
+        res.render('pages/login.ejs',{req: req})
     }
 })

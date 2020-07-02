@@ -15,7 +15,7 @@ var users = `CREATE TABLE IF NOT EXISTS users ( \
     score INT DEFAULT 0 ,\
     orientation VARCHAR(255), \
     active DATETIME,\
-    img1 VARCHAR(255) DEFAULT '/img/empty.jpg')`
+    img1 VARCHAR(255) DEFAULT '/img/default.jpg')`
 conn.query(users, function (err, res) { if (err) throw err })
 
 
@@ -28,23 +28,22 @@ conn.query(tags, function (err) { if (err) throw err })
 var likes = `CREATE TABLE IF NOT EXISTS likes (\
     id INT AUTO_INCREMENT PRIMARY KEY, \
     user_id INT NOT NULL, \ 
-    his_id INT NOT NULL)`
+    secondUsrId INT NOT NULL)`
 conn.query(likes, function (err) { if (err) throw err }) 
 
 var chat = `CREATE TABLE IF NOT EXISTS chat (\
     id INT AUTO_INCREMENT PRIMARY KEY, \
     message TEXT, \
     user_id INT NOT NULL, \ 
-    his_id INT NOT NULL, \
+    secondUsrId INT NOT NULL, \
     date DATETIME DEFAULT CURRENT_TIMESTAMP)`
 conn.query(chat, function (err) { if (err) throw err })
 
 var notifs = `CREATE TABLE IF NOT EXISTS notifs (\
     id INT AUTO_INCREMENT PRIMARY KEY, \
     user_id INT NOT NULL, \ 
-    his_id INT NOT NULL, \
+    secondUsrId INT NOT NULL, \
     notif TEXT, \
-    seen INT NOT NULL DEFAULT 0, \
     date DATETIME DEFAULT CURRENT_TIMESTAMP)
 `
  conn.query(notifs, function (err) { if (err) throw err })
@@ -52,22 +51,15 @@ var notifs = `CREATE TABLE IF NOT EXISTS notifs (\
  var visits = `CREATE TABLE IF NOT EXISTS visits (\
     id INT AUTO_INCREMENT PRIMARY KEY, \
     user_id INT NOT NULL, \ 
-    his_id INT NOT NULL, \
+    secondUsrId INT NOT NULL, \
     date DATETIME DEFAULT CURRENT_TIMESTAMP)`
  conn.query(visits, function (err) { if (err) throw err })
 
  var block = `CREATE TABLE IF NOT EXISTS block (\
     id INT AUTO_INCREMENT PRIMARY KEY, \
     user_id INT NOT NULL, \ 
-    his_id INT NOT NULL)`
+    secondUsrId INT NOT NULL)`
 conn.query(block, function (err) { if (err) throw err }) 
-
-// var report = `CREATE TABLE IF NOT EXISTS report (\
-//     id INT AUTO_INCREMENT PRIMARY KEY, \
-//     user_id INT NOT NULL, \ 
-//     his_id INT NOT NULL)`
-// conn.query(report, function (err) { if (err) throw err }) 
-
 
 
 

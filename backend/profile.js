@@ -2,54 +2,23 @@ function updateuser(column, change) {
         var sql = 'UPDATE users SET ' + column + ' = ? WHERE id = ?'
         conn.query(sql, [change, req.session.profile.id], function (err) { if (err) throw err })
         req.session.profile[column] = change
-        var success = 'Your ' + column + ' was successfully changed'
-        tool.getlikes(conn, req.session.profile.id, function (like) {
-                tool.getvisits(conn, req.session.profile.id, function (visit) {
+        var success = column + ' was successfully changed'
+        functions.getlikes(conn, req.session.profile.id, function (like) {
+                functions.getvisits(conn, req.session.profile.id, function (visit) {
                         res.render("pages/profile", { success: success, profile: req.session.profile, notif: notifs, like: like, visit: visit })
                 })
         })
 }
 
 
-// if (req.session.profile.api == 2) {
-//         conn.query('SELECT * FROM `tags` WHERE user_id = ?', [req.session.profile.id], function (err, result) {
-//                 if (err) throw err
-//                 req.session.profile.tag = result;
-//         })
-// }
-
-
-function fokXSS(text) {
-        var map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-        };
-        return text.replace(/[&<>"']/g, function (m) { return map[m]; });
-}
-
-function checklocation(set) {
-        sql = 'UPDATE users SET checklocation = ? WHERE id = ?'
-        conn.query(sql, [set, req.session.profile.id], function (err, result) {
-                if (err) throw err
-        })
-        req.session.profile.checklocation = set;
-        tool.getlikes(conn, req.session.profile.id, function (like) {
-                tool.getvisits(conn, req.session.profile.id, function (visit) {
-                        res.render("pages/profile", { profile: req.session.profile, notif: notifs, like: like, visit: visit })
-                })
-        })
-}
 
 function settags(i, msg) {
         sql = 'SELECT * FROM `tags` WHERE user_id = ?'
         conn.query(sql, [req.session.profile.id], function (err, result) {
                 if (err) throw err
                 req.session.profile.tag = result;
-                tool.getlikes(conn, req.session.profile.id, function (like) {
-                        tool.getvisits(conn, req.session.profile.id, function (visit) {
+                functions.getlikes(conn, req.session.profile.id, function (like) {
+                        functions.getvisits(conn, req.session.profile.id, function (visit) {
                                 if (i == 1) {
                                         res.render('pages/profile', { success: msg, visit: visit, like: like, profile: req.session.profile, notif: notifs })
                                 }
@@ -69,7 +38,7 @@ if (req.session.profile == undefined) {
 }
 
 else if (req.body.edit && req.body.general === 'update') {
-        var change = eschtml(req.body.changement);
+        var change = escapehtml(req.body.changement);
 
         if (req.body.edit === '1') {
                 sql = 'SELECT * FROM `users` WHERE username = ?'
@@ -79,8 +48,8 @@ else if (req.body.edit && req.body.general === 'update') {
                                 updateuser('username', change)
                         else
                                 msg = "username already exists"
-                        tool.getlikes(conn, req.session.profile.id, function (like) {
-                                tool.getvisits(conn, req.session.profile.id, function (visit) {
+                        functions.getlikes(conn, req.session.profile.id, function (like) {
+                                functions.getvisits(conn, req.session.profile.id, function (visit) {
                                         res.render('pages/profile', { like: like, visit: visit, profile: req.session.profile, notif: notifs, error: msg })
                                 })
                         })
@@ -98,9 +67,9 @@ else if (req.body.edit && req.body.general === 'update') {
                                 if (result.length === 0)
                                         updateuser('email', change)
                                 else {
-                                        msg = "Sorry, this email already exists"
-                                        tool.getlikes(conn, req.session.profile.id, function (like) {
-                                                tool.getvisits(conn, req.session.profile.id, function (visit) {
+                                        msg = "email already exists"
+                                        functions.getlikes(conn, req.session.profile.id, function (like) {
+                                                functions.getvisits(conn, req.session.profile.id, function (visit) {
                                                         res.render('pages/profile', { like: like, visit: visit, profile: req.session.profile, notif: notifs, error: msg })
                                                 })
                                         })
@@ -114,9 +83,9 @@ else if (req.body.edit && req.body.general === 'update') {
                 regUp = /[A-Z]/
                 if (change.length < 5)
                 {
-                        msg = "Your password is too short"
-                                        tool.getlikes(conn, req.session.profile.id, function (like) {
-                                                tool.getvisits(conn, req.session.profile.id, function (visit) {
+                        msg = "password is too short"
+                                        functions.getlikes(conn, req.session.profile.id, function (like) {
+                                                functions.getvisits(conn, req.session.profile.id, function (visit) {
                                                         res.render('pages/profile', { like: like, visit: visit, profile: req.session.profile, notif: notifs, error: msg })
                                                 })
                                         })
@@ -124,8 +93,8 @@ else if (req.body.edit && req.body.general === 'update') {
                 else if (change.search(regLow) === -1)
                 {
                         msg = "Password must contain a lowercase"
-                                        tool.getlikes(conn, req.session.profile.id, function (like) {
-                                                tool.getvisits(conn, req.session.profile.id, function (visit) {
+                                        functions.getlikes(conn, req.session.profile.id, function (like) {
+                                                functions.getvisits(conn, req.session.profile.id, function (visit) {
                                                         res.render('pages/profile', { like: like, visit: visit, profile: req.session.profile, notif: notifs, error: msg })
                                                 })
                                         })
@@ -133,8 +102,8 @@ else if (req.body.edit && req.body.general === 'update') {
                 else if (change.search(regUp) === -1)
                 {
                         msg = "Password must contain an uppercase"
-                                        tool.getlikes(conn, req.session.profile.id, function (like) {
-                                                tool.getvisits(conn, req.session.profile.id, function (visit) {
+                                        functions.getlikes(conn, req.session.profile.id, function (like) {
+                                                functions.getvisits(conn, req.session.profile.id, function (visit) {
                                                         res.render('pages/profile', { like: like, visit: visit, profile: req.session.profile, notif: notifs, error: msg })
                                                 })
                                         })
@@ -167,12 +136,8 @@ else if (req.body.age && req.body.sub_age === 'update') {
         }
 }
 
-else if (req.body.fakelocation && req.body.fake_loc_btn === 'update') {
-        updateuser('fakelocation', req.body.fakelocation)
-}
-
 else if (req.body.bio && req.body.sub_bio === 'update') {
-        bio = fokXSS(req.body.bio)
+        bio = req.body.bio
         updateuser('bio', bio)
 }
 
@@ -182,7 +147,7 @@ else if (req.body.newtag) {
         if (!req.body.newtag.trim())
                 res.render('pages/profile', { profile: req.session.profile, notif: notifs })
         else {
-                var newtag = eschtml(req.body.newtag)
+                var newtag = escapehtml(req.body.newtag)
                 if (newtag.length < 41) {
                         sql = 'SELECT * FROM `tags` WHERE user_id = ? AND tag = ?'
                         conn.query(sql, [req.session.profile.id, newtag], function (err, result) {
@@ -190,13 +155,13 @@ else if (req.body.newtag) {
                                 if (result.length === 0) {
                                         sql = 'INSERT INTO tags (tag, user_id) VALUES (?,?)'
                                         conn.query(sql, [newtag, req.session.profile.id], function (err, result) { if (err) throw err })
-                                        settags(1, "Your tag is successfully added !");
+                                        settags(1, "tag added");
 
                                 }
                                 else {
-                                        tool.getlikes(conn, req.session.profile.id, function (like) {
-                                                tool.getvisits(conn, req.session.profile.id, function (visit) {
-                                                        var msg = "Your tag is not added !"
+                                        functions.getlikes(conn, req.session.profile.id, function (like) {
+                                                functions.getvisits(conn, req.session.profile.id, function (visit) {
+                                                        var msg = "tag not added"
                                                         res.render('pages/profile', { error: msg, like: like, visit: visit, profile: req.session.profile, notif: notifs })
                                                 })
                                         })
@@ -204,8 +169,8 @@ else if (req.body.newtag) {
                         })
                 }
                 else
-                        tool.getlikes(conn, req.session.profile.id, function (like) {
-                                tool.getvisits(conn, req.session.profile.id, function (visit) {
+                        functions.getlikes(conn, req.session.profile.id, function (like) {
+                                functions.getvisits(conn, req.session.profile.id, function (visit) {
                                         var msg = "Error"
                                         res.render('pages/profile', { like: like, visit: visit, profile: req.session.profile, notif: notifs, error: msg })
                                 })
@@ -220,11 +185,11 @@ else if (req.body.deltag) {
         conn.query(sql, [req.session.profile.id, req.body.deltag], function (err, result) {
                 if (err) throw err
                 if (result.length !== 0) {
-                        settags(1, 'Your tag is successful deleted');
+                        settags(1, 'tag is successful deleted');
                 }
                 else
-                        tool.getlikes(conn, req.session.profile.id, function (like) {
-                                tool.getvisits(conn, req.session.profile.id, function (visit) {
+                        functions.getlikes(conn, req.session.profile.id, function (like) {
+                                functions.getvisits(conn, req.session.profile.id, function (visit) {
                                         var msg = "Error"
                                         res.render('pages/profile', { profile: req.session.profile, notif: notifs, visit: visit, like: like, error: msg })
                                 })
@@ -233,17 +198,10 @@ else if (req.body.deltag) {
         })
 }
 
-else if (req.body.switch) {
-        if (req.body.switch === 'false') {
-                checklocation(0);
-        }
-        else if (req.body.switch === 'true') {
-                checklocation(1);
-        }
-}
+
 else {
-        tool.getlikes(conn, req.session.profile.id, function (like) {
-                tool.getvisits(conn, req.session.profile.id, function (visit) {
+        functions.getlikes(conn, req.session.profile.id, function (like) {
+                functions.getvisits(conn, req.session.profile.id, function (visit) {
                         res.render('pages/profile', { profile: req.session.profile, notif: notifs, like: like, visit: visit })
                 })
         })

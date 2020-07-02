@@ -3,7 +3,7 @@ function userprofilevalidate(result) {
     while (result[i]) {
         if ((result[i].confirm !== 1))
             result[i].valid = 0;
-        else if ((!result[i].gender || !result[i].bio || result[i].img1 == '/img/empty.jpg' || result[i].age <= 0 || !result[i].orientation))
+        else if ((!result[i].gender || !result[i].bio || result[i].img1 == '/img/default.jpg' || result[i].age <= 0 || !result[i].orientation))
             result[i].valid = 0;
         else
             result[i].valid = 1;
@@ -13,7 +13,7 @@ function userprofilevalidate(result) {
     return (result);
 }
 
-function profilevalidate(req, res, profile) {
+function confirmAccount(req, res, profile) {
 
     if (profile.confirm !== 1)
     {
@@ -21,7 +21,7 @@ function profilevalidate(req, res, profile) {
         return false
     }
 
-    if (!profile.gender || !profile.bio || !profile.orientation || profile.age <= 0 || profile.img1 == '/img/empty.jpg') {
+    if (!profile.gender || !profile.bio || !profile.orientation || profile.age <= 0 || profile.img1 == '/img/default.jpg') {
         res.render('pages/profile', { notif: notifs, error: 'complete your account first', profile: profile, like: 'none', visit: 'none' })
         return false
     }
@@ -36,7 +36,7 @@ function    blocked(result, myid, callback)
         {
             while (block[i])
             {
-                result = result.filter(function(val, a, result){return (val.id != block[i].his_id)})
+                result = result.filter(function(val, a, result){return (val.id != block[i].secondUsrId)})
                 i++;
             }
         }
@@ -173,9 +173,6 @@ function triage(first, second)
 if (req.session.profile == undefined)
     res.redirect('/')
 
-else if (profilevalidate(req, res, req.session.profile) == false) {
-    console.log("bop")
-}
 
 
 
@@ -231,15 +228,8 @@ else {
                     })
                 };
             }
-            if (req.body.distance) {
-                if (!isNaN(req.body.distance)) {
-                    result = result.filter(function (val, i, result) {
-                        return (val.distance <= req.body.distance);
-                    })
-                };
-            }
             if (req.body.tags) {
-                var tags = eschtml(req.body.tags)
+                var tags = escapehtml(req.body.tags)
 
                 tabtags = tags.split(";")
                 result = result.filter(function (val, i, result) {

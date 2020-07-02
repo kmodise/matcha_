@@ -14,7 +14,7 @@ if (req.query.username && req.query.key)
     		res.render('pages/login')
  		}
 		else
-        res.render('pages/register',{error: "Error !"})
+        res.render('pages/register',{error: "Error"})
     })
 }
 else

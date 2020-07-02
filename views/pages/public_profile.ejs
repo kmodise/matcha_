@@ -1,22 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <% include ../extras/head.ejs %>
-</head>
-<body id="profile-user">
+<body>
     <% include ../extras/navbar.ejs %>
 
     <div>
-    <div>
       <% if (online == 1){%>
         <p>Online</p>
-        
-        <%}else {%>
-          <p>Offline</p>
-          <% if (profile.active == null) { profile.active = 'Never'%><%-profile.active%> <%} else {%>
-          <time class="timeago" datetime="<%-profile.active.getFullYear()%>-<%-profile.active.getUTCMonth()+1%>-<%-profile.active.getDate()%>T<%-profile.active.getHours()%>:<%-profile.active.getMinutes()%>:<%-profile.active.getSeconds()%>"></time>
-<%}%>
+        <%}%>
       <%} if (like == 2) { %>
         <p><i><b> this user likes you, so... what do u say?</b></i></p>
       <% } %>
@@ -66,8 +57,6 @@
         </form>
       </div>
 
-     
-       
      </div>
 
   </div>
@@ -75,31 +64,6 @@
 </body>
   <% include ../extras/footer.ejs %>
  
-  <script src="/socket.io/socket.io.js"></script>
-
-  <script>
-
-var socket = io('http://localhost:3000');
-<% if (Array.isArray(notif) == false) { %>
-var id = <%- notif %> ;
-<% } else { %>
-var id = <%- notif[0].user_id %> ;
-<% }  %>
-socket.on('connect', function (data) {
-    socket.emit('setUserId', id)
-});
-
-$("time.timeago").timeago();
-
-    <% if (like == 1 || like == 3) { %>
-		document.getElementById("like").disabled = "disabled";
-	<% } else if (like == -1) { %>
-		document.getElementById("like").disabled = "disabled";
-		document.getElementById("dislike").disabled = "disabled";
-	<% } else { %>
-		document.getElementById("dislike").disabled = "disabled";
-	<% } %>
-  </script>
 
 
 </html>

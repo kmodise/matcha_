@@ -1,6 +1,6 @@
-function	check(table, user_id, his_id, callback)
+function	check(table, user_id, secondUsrId, callback)
 {
-	conn.query('SELECT * FROM ' + table + ' WHERE user_id = ? AND his_id = ?', [user_id, his_id], function (err, rows) { if (err) throw err 
+	conn.query('SELECT * FROM ' + table + ' WHERE user_id = ? AND secondUsrId = ?', [user_id, secondUsrId], function (err, rows) { if (err) throw err 
 		if (rows.length == 0)
 			return callback(0);
 		else
@@ -25,7 +25,7 @@ function	createnotif(table)
 		
 		checklike(req.session.profile.id, req.params.id, function (like){
 			if (like == 2)
-				notif('THIS USER IS NO LONGER A MATCH ' + name + ' :(');
+				notif('THIS USER IS NO LONGER A MATCH ' + name);
 		})
 	}
 	else if (table == 'visits')
@@ -34,12 +34,12 @@ function	createnotif(table)
 function	notif(msg)
 {
 	
-		conn.query('INSERT INTO notifs (user_id, his_id, notif) VALUES (?, ?, ?) ', [req.params.id, req.session.profile.id, msg], function (err) { if (err) throw err })
+		conn.query('INSERT INTO notifs (user_id, secondUsrId, notif) VALUES (?, ?, ?) ', [req.params.id, req.session.profile.id, msg], function (err) { if (err) throw err })
 		console.log(user[req.params.id])
 		if (user[req.params.id])
 		{
-	    	conn.query('SELECT date FROM notifs WHERE user_id=? AND his_id=? AND notif=?', [req.params.id, req.session.profile.id, msg], function (err, date) { if (err) throw err 
-			user[req.params.id].emit('notification', {his_id: req.session.profile.id, not: msg, date: date[0].date.getFullYear()+'-'+date[0].date.getUTCMonth()+'-'+date[0].date.getDate()+'T'+date[0].date.getHours()}); })
+	    	conn.query('SELECT date FROM notifs WHERE user_id=? AND secondUsrId=? AND notif=?', [req.params.id, req.session.profile.id, msg], function (err, date) { if (err) throw err 
+			user[req.params.id].emit('notification', {secondUsrId: req.session.profile.id, not: msg, date: date[0].date.getFullYear()+'-'+date[0].date.getUTCMonth()+'-'+date[0].date.getDate()+'T'+date[0].date.getHours()}); })
 			
 		}
 		else 
@@ -60,11 +60,11 @@ function score(val) {
 }
 
 function insertinto(table) {
-	conn.query('INSERT INTO ' + table + ' (user_id, his_id) VALUES (?,?) ', [req.session.profile.id, req.params.id], function (err) { if (err) throw err })
+	conn.query('INSERT INTO ' + table + ' (user_id, secondUsrId) VALUES (?,?) ', [req.session.profile.id, req.params.id], function (err) { if (err) throw err })
 	createnotif(table);
 }
 function deletefrom(table) {
-	conn.query('DELETE FROM ' + table + ' WHERE user_id = ? AND his_id = ?', [req.session.profile.id, req.params.id], function (err) { if (err) throw err })
+	conn.query('DELETE FROM ' + table + ' WHERE user_id = ? AND secondUsrId = ?', [req.session.profile.id, req.params.id], function (err) { if (err) throw err })
 	createnotif('dislike');
 }
 
@@ -80,19 +80,19 @@ function checkonline(){
 	
 }
 
-function checklike(user_id, his_id, callback) {
+function checklike(user_id, secondUsrId, callback) {
 	var a = 0
 	var b = 0
-	conn.query('SELECT * FROM likes WHERE user_id = ? AND his_id = ?', [user_id, his_id], function (err, rows) {
+	conn.query('SELECT * FROM likes WHERE user_id = ? AND secondUsrId = ?', [user_id, secondUsrId], function (err, rows) {
 		if (err) throw err
 		if (rows.length == 1)
 			a = 1;
 
-		conn.query('SELECT * FROM likes WHERE user_id = ? AND his_id = ?', [his_id, user_id], function (err, rows) {
+		conn.query('SELECT * FROM likes WHERE user_id = ? AND secondUsrId = ?', [secondUsrId, user_id], function (err, rows) {
 			if (err) throw err
 			if (rows.length == 1)
 				b = 1;
-			if (user_id == his_id)
+			if (user_id == secondUsrId)
 				return callback(-1);
 			else if (a == 0 && b == 0)
 				return callback(0);

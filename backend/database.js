@@ -1,5 +1,5 @@
-conn.query('CREATE DATABASE IF NOT EXISTS `matcha`', function (err) { if (err) throw err })
-conn.query('USE `matcha`', function (err) { if (err) throw err })
+conn.query('CREATE DATABASE IF NOT EXISTS `matcha2`', function (err) { if (err) throw err })
+conn.query('USE `matcha2`', function (err) { if (err) throw err })
 var users = `CREATE TABLE IF NOT EXISTS users ( \
     id INT AUTO_INCREMENT PRIMARY KEY, \
     username VARCHAR(255), \
@@ -15,7 +15,7 @@ var users = `CREATE TABLE IF NOT EXISTS users ( \
     score INT DEFAULT 0 ,\
     orientation VARCHAR(255), \
     active DATETIME,\
-    img1 VARCHAR(255) DEFAULT '/img/default.jpg')`
+    profileImg VARCHAR(255) DEFAULT '/img/default.jpg')`
 conn.query(users, function (err, res) { if (err) throw err })
 
 

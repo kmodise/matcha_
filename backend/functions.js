@@ -1,13 +1,4 @@
 module.exports = {
-    myNotifications: function (conn, id, callback) {
-        conn.query('SELECT * FROM notifs WHERE user_id = ? ORDER BY date DESC LIMIT 20', [id], function (err, notifs) {
-            if (err) throw err
-            if (notifs.length == 0)
-                return callback(id);
-            else
-                return callback(notifs);
-        })
-    },
 
     getlikes: function (conn, user_id, callback) {
         conn.query('SELECT * FROM likes WHERE secondUsrId = ?', [user_id], function (err, row) {
@@ -25,6 +16,16 @@ module.exports = {
                 if (err) throw err
                 return callback(like);
             })
+        })
+    },
+
+    myNotifications: function (conn, id, callback) {
+        conn.query('SELECT * FROM notifs WHERE user_id = ? ORDER BY date DESC LIMIT 20', [id], function (err, notifs) {
+            if (err) throw err
+            if (notifs.length == 0)
+                return callback(id);
+            else
+                return callback(notifs);
         })
     },
 
@@ -47,8 +48,7 @@ module.exports = {
             })
             })
         }, 
-        checkmatch: function(con, user_id, secondUsrId, callback)
-{
+ checkmatch: function(con, user_id, secondUsrId, callback){
     var a = 0
     var b = 0
      con.query('SELECT * FROM likes WHERE user_id = ? AND secondUsrId = ?', [user_id, secondUsrId], function (err, rows) { if (err) throw err 
@@ -62,7 +62,5 @@ module.exports = {
         else
             return callback(0);
      }) })
-}
-
-    }
+}}
 

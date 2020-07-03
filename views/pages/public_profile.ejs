@@ -4,20 +4,10 @@
 <body>
     <% include ../extras/navbar.ejs %>
 
-    <div>
-      <% if (online == 1){%>
-        <p>Online</p>
-        <%}%>
-      <%} if (like == 2) { %>
-        <p><i><b> this user likes you, so... what do u say?</b></i></p>
-      <% } %>
-      <% if (like == 3) { %>
-            <h1 style="text-align: center;">match</h1>
-        <% } %>
-      <div >
+    
         <div>
           
-            <img src="<%-profile.img1%>">
+            <img src="<%-profile.profileImg%>">
           
         </div>
         

@@ -35,12 +35,9 @@ if (req.body.username && req.body.firstname && req.body.name && req.body.email &
                                 {
                                     from: "kgosaneli@gmail.com", to: email, subject: "Confirm Matcha account",
                                     text: "Hi looking for love?",
-                                    html: '<html><body><div align=center> \
-                                     <BR />You are one step away from a hookup just click on the link: <BR />\
-                                    <a href=http://localhost:3000/confirm?username='+ username + '&key=' + key + '>confirm</a>\
-                                    </div></body></html>'
+                                    html: '<html><body><div align=center>  <BR />You are one step away from a hookup just click on the link: <BR /> <a href=http://localhost:3000/confirm?username='+ username + '&key=' + key + '>confirm</a> </div></body></html>'
                                 }
-                                Transport.sendMail(mail,function(error, response){
+                                Transport.sendMail(mail,(error, response) => {
                                     if (error){
                                         var msg = "nodemailer fail"
                                         res.render('pages/register',{error: msg})
@@ -51,7 +48,6 @@ if (req.body.username && req.body.firstname && req.body.name && req.body.email &
                                         res.render('pages/login',{success: msg})
                                     }
                                     
-
                                     Transport.close()})
                                     bcrypt.hash(password,10,function(err, hash){if (err) throw err
                                     sql = 'INSERT INTO `users` (`username`, `firstname`, `name`, `email`, `password`,`confirmkey`) VALUES (?, ?, ?, ?, ?, ?)'

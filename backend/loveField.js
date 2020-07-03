@@ -3,7 +3,7 @@ function userprofilevalidate(result) {
     while (result[i]) {
         if ((result[i].confirm !== 1))
             result[i].valid = 0;
-        else if ((!result[i].gender || !result[i].bio || result[i].img1 == '/img/default.jpg' || result[i].age <= 0 || !result[i].orientation))
+        else if ((!result[i].gender || !result[i].bio || result[i].profileImg == '/img/default.jpg' || result[i].age <= 0 || !result[i].orientation))
             result[i].valid = 0;
         else
             result[i].valid = 1;
@@ -21,7 +21,7 @@ function confirmAccount(req, res, profile) {
         return false
     }
 
-    if (!profile.gender || !profile.bio || !profile.orientation || profile.age <= 0 || profile.img1 == '/img/default.jpg') {
+    if (!profile.gender || !profile.bio || !profile.orientation || profile.age <= 0 || profile.profileImg == '/img/default.jpg') {
         res.render('pages/profile', { notif: notifs, error: 'complete your account first', profile: profile, like: 'none', visit: 'none' })
         return false
     }

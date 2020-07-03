@@ -25,7 +25,7 @@
         <div class="row">
             <div>
                 <div  class="update" style="width: 90%;">
-                    <img src="<%-profile.img1%>" style="height: 100%;">
+                    <img src="<%-profile.profileImg%>" style="height: 100%;">
                     <div>
                         <div>
                             <form action="/profile" method="POST">
@@ -74,7 +74,7 @@
 
                         <%if (profile.tag && profile.tag[0]){%><li class="bio"><%i = 0
                                     while (profile.tag[i]){ %>
-                            <div ><%-profile.tag[i].tag%></div>
+                            <div >#<%-profile.tag[i].tag%></div>
 
                             <% i++ }} %></li>
                     </ul>
@@ -116,7 +116,7 @@
                                              %>
                                     <div>
                                         <form action="/profile" method="post">
-                                            <strong><%- profile.tag[i].tag %></strong>
+                                            <strong>#<%- profile.tag[i].tag %></strong>
                                             <button type="submit"  name="deltag" value="<%= profile.tag[i++].id %>">X</button>
                                         </form>
                                     </div>
@@ -137,7 +137,7 @@
                                 <div>
                                     <input type="file" name="file" id="validatedCustomFile" accept=".jpg, .jpeg, .png" required>
                                     <label  for="validatedCustomFile">pick a pic</label>
-                                    <input type=submit name=img1  value="Upload Image">
+                                    <input type=submit name=profileImg  value="Upload Image">
                                 </div>
                             </form>
                         </div>

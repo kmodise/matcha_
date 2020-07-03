@@ -14,23 +14,15 @@ function updateuser(column, change)
 function UploadImage(){
     var form = new formidable.IncomingForm()
     form.parse(req, function (err, field, files) { if (err) throw err;
-        if (field.img1 !== 'Upload Image')
+        if (field.profileImg !== 'Upload Image')
         {
-            console.log('server error');
+            console.log('image server problem');
             return ;
         }
-        var i = 1
-        while (i <= 4)
-        {
-            var tmp = 'img' + i
-            if (field[tmp] == 'Upload Image')
-                var name = tmp;
-            i++;
-        }
+        
+        var name = 'profileImg';
         var dir =  __dirname + '/public/img/users/' + req.session.profile.id;
-        if (!fs.existsSync(dir)){
-            fs.mkdirSync(dir);
-        }
+        
          var oldpath = files.file.path;
             newpath = dir + '/' + name;
             fs.readFile(oldpath, function (err, data) { if (err) throw err; 

@@ -11,7 +11,7 @@ else if (req.body.username && req.body.password)
             bcrypt.compare(req.body.password, result[0].password, function(err, reso) {
                 if (reso)
                {
-                if (result[0].confirm === 1){
+                if (result[0].activate === 1){
                     
                         req.session.profile = result[0]
                         
@@ -25,7 +25,7 @@ else if (req.body.username && req.body.password)
                         })
                 }
                 else 
-                    res.render('pages/login',{error: "confirm account first"})
+                    res.render('pages/login',{error: "activate account first"})
                 
             }
                 else 
@@ -43,50 +43,6 @@ else if (req.body.username && req.body.password)
 else {
     res.render('pages/login',{error: "Fill up the whole form"})
 }
-
-
-
-
-
-
-
-
-
-
-
-/*
-if (!req.body.username && !req.body.password)
-  res.render('pages/login.ejs', {req: req, css: css})
-else if (req.body.username && req.body.password)
-{
-
-if (req.body.username && req.body.password){
-
-    sql = 'SELECT * FROM `users` WHERE username = ?'
-    variables = [req.body.username]
-    conn.query(sql, variables, function (err, result) { if (err) throw err
-        if (result.length > 0)
-        {
-            session = req.session
-            session.profile = result[0]
-            if (req.body.password === session.profile.password){
-                console.log("BINGOOO")
-                res.render('pages/main_page')
-            }
-            else{
-                console.log("Manqué")
-                res.render('pages/login')
-            }
-            
-        
-        }
-    }) 
-
-    
-}
-
-}
-*/
 
 
 

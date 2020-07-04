@@ -1,10 +1,10 @@
 
 var mailer = require("nodemailer")
 
-if (req.body.username && req.body.firstname && req.body.name && req.body.email && req.body.password){
+if (req.body.username && req.body.firstname && req.body.lastname && req.body.email && req.body.password){
     var username = escapehtml(req.body.username)
     var firstname = escapehtml(req.body.firstname)
-    var name = escapehtml(req.body.name)
+    var lastname = escapehtml(req.body.lastname)
     var email = escapehtml(req.body.email)
     var password = escapehtml(req.body.password)
     var lowerC = /[a-z]/
@@ -17,8 +17,7 @@ if (req.body.username && req.body.firstname && req.body.name && req.body.email &
                         
                     sql = 'SELECT username FROM users WHERE username = ? OR email = ?'
                     conn.query(sql,[username,email],
-                        function (error, result)
-                        {
+                        (error, result) => {
                             if (error) throw error
                             if (result.length == 0)
                             {
@@ -33,9 +32,9 @@ if (req.body.username && req.body.firstname && req.body.name && req.body.email &
                                 key = rand.generateDigits(5)
                                 mail = 
                                 {
-                                    from: "kgosaneli@gmail.com", to: email, subject: "Confirm Matcha account",
+                                    from: "kgosaneli@gmail.com", to: email, subject: "Matcha account activation",
                                     text: "Hi looking for love?",
-                                    html: '<html><body><div align=center>  <BR />You are one step away from a hookup just click on the link: <BR /> <a href=http://localhost:3000/confirm?username='+ username + '&key=' + key + '>confirm</a> </div></body></html>'
+                                    html: '<html><body><div align=center>  <BR />You are one step away from a hookup just click on the link: <BR /> <a href=http://localhost:3000/activateAccount?username='+ username + '&key=' + key + '>activate</a> </div></body></html>'
                                 }
                                 Transport.sendMail(mail,(error, response) => {
                                     if (error){
@@ -50,8 +49,8 @@ if (req.body.username && req.body.firstname && req.body.name && req.body.email &
                                     
                                     Transport.close()})
                                     bcrypt.hash(password,10,function(err, hash){if (err) throw err
-                                    sql = 'INSERT INTO `users` (`username`, `firstname`, `name`, `email`, `password`,`confirmkey`) VALUES (?, ?, ?, ?, ?, ?)'
-                                    variables = [username, firstname, name, email, hash, key]
+                                    sql = 'INSERT INTO `users` (`username`, `firstname`, `lastname`, `email`, `password`,`vkey`) VALUES (?, ?, ?, ?, ?, ?)'
+                                    variables = [username, firstname, lastname, email, hash, key]
                                     var promise1 = new Promise(function(resolve, reject) { conn.query(sql, variables, function (err, res) { if (err) throw err }) }) 
                                         
                                         promise1.then(conn.query('SELECT * FROM users WHERE username = ?', [username], function (err, res) { if (err) throw err
@@ -86,6 +85,6 @@ if (req.body.username && req.body.firstname && req.body.name && req.body.email &
 
 }
 else {
-    var msg = "oops, forgot to fill full form"
+    var msg = "fill the whole form"
     res.render('pages/register',{error: msg})
 }

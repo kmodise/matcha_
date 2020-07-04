@@ -1,23 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
 
 
 <body>
         <% if (typeof error !== 'undefined' && error && error !== 'none') { 
             %>
-              <%-error%>
+              <%=error%>
         <% } %>
         <% if (typeof success !== 'undefined' && success && success !== 'none') { 
             %>
-              <%-success%>
+              <%=success%>
         <% } %>
-        <section>
-        <form style="padding-right: 0%;" action="register" method="post">
+        <form action="register" method="post">
             <input type="username" name=username placeholder="Username" required autofocus>
 
-            <input type="name"  name=firstname placeholder="Your firstname" required >
+            <input type="name"  name=firstname placeholder="firstname" required >
 
-            <input type="name"  name=name placeholder="Your Name" required >
+            <input type="name"  name=lastname placeholder="lastname" required >
 
             <input type="email" name=email placeholder="Email address" required>
 
@@ -26,9 +24,6 @@
            <p> <button type="submit">Register</button> </p>
             <p><a href="/login">Sign-in</a></p>
         </form>
-    </section>
         <% include ../extras/footer.ejs %>
     </body>
-
-
 </html>

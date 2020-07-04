@@ -7,33 +7,33 @@
     
         <div>
           
-            <img src="<%-profile.profileImg%>">
+            <img src="<%=profile.profileImg%>">
           
         </div>
         
       <div>
-        <h5><%-profile.name%></h5>
-        <p><%-profile.bio%></p>
+        <h5><%=profile.firstname%> <%=profile.lastname%></h5>
+        <p><%=profile.bio%></p>
       </div>
       <ul>
-        <li><%-profile.age%>years</li>
-        <li><%-profile.gender%></li>
+        <li><%=profile.age%>years</li>
+        <li><%=profile.gender%></li>
         
         <%if (tag && tag[0]){%><li><%i = 0
           while (tag[i]){ %>
-            <div>I like <%-tag[i].tag%></div>
+            <div>I like <%=tag[i].tag%></div>
 
           <% i++ }} %></li>
-          <li><%-profile.score%> popularity points</li>
+          <li><%=profile.score%> popularity points</li>
       </ul>
      
       <div>
-        <form action="/user_profile/<%- profile.id %>" method="post">
+        <form action="/user_profile/<%= profile.id %>" method="post">
          <input type="submit" name="block" value="Block" />
        </form>
 
       <div>
-        <form action="/user_profile/<%- profile.id %>" method="post">
+        <form action="/user_profile/<%= profile.id %>" method="post">
           <div>
             <div">
              <strong>like</strong> <input type="submit" id="like" name="like" value=""

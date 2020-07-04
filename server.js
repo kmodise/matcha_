@@ -74,9 +74,9 @@ app.get('/register', (req, res) => {
             res.redirect('/profile')
         }
     })
-app.get('/forget_password', (req, res) => {
+app.get('/forgotPassword', (req, res) => {
         if (req.session.profile == undefined) {
-            res.render('pages/forget_password')
+            res.render('pages/forgotPassword')
         }
         else {
             res.redirect('/profile')
@@ -88,30 +88,30 @@ app.get('/logout', (req, res) => {
         res.redirect('/')
     })
 
-app.get('/confirm', (req, res) => {
-        eval(fs.readFileSync(__dirname + "/backend/confirm.js") + '')
+app.get('/activateAccount', (req, res) => {
+        eval(fs.readFileSync(__dirname + "/backend/activateAccount.js") + '')
     })
 
 app.all('/loveField', urlencodedParser, (req, res) => {
         if (req.session.profile == undefined)
             res.redirect('/')
         else {
-            functions.myNotifications(conn, req.session.profile.id, (notifs) => {
+            functions.myNotifications(conn, req.session.profile.id, (notifications) => {
             eval(fs.readFileSync(__dirname + "/backend/loveField.js") + '')})
         }
     })
 
-app.get('/seed' ,(req, res) => {
-        eval(fs.readFileSync(__dirname + "/backend/seed.js") + '')
+app.get('/HYDRATE' ,(req, res) => {
+        eval(fs.readFileSync(__dirname + "/backend/HYDRATE.js") + '')
         console.log(res);
     })
 
-app.get('/public_profile', (req, res) => {
-        res.render('pages/public_profile.ejs', {tag: req.session.profile.tag, req: req, profile: req.session.profile, like: -1, online: 1 })
+app.get('/loveFieldProfile', (req, res) => {
+        res.render('pages/loveFieldProfile.ejs', {tag: req.session.profile.tag, req: req, profile: req.session.profile, like: -1, online: 1 })
     })
 
 app.get('/myMatch', (req, res) => {
-        functions.myNotifications(conn, req.session.profile.id, (notifs) => {
+        functions.myNotifications(conn, req.session.profile.id, (notifications) => {
         eval(fs.readFileSync(__dirname + "/backend/myMatch.js") + '')})
     })
 
@@ -126,8 +126,8 @@ app.get('/chat/:id', (req, res) => {
                     if (match == 0)
                         res.redirect('/')
                     else {
-                        functions.myNotifications(conn, req.session.profile.id, (notifs) => {
-                    res.render('pages/chat', { req: req, user2: user2[0], chat: chat, notif: notifs})
+                        functions.myNotifications(conn, req.session.profile.id, (notifications) => {
+                    res.render('pages/chat', { req: req, user2: user2[0], chat: chat, notif: notifications})
                 })
             }
             })
@@ -144,8 +144,8 @@ app.post('/', (req, res) => {
 app.post('/register', urlencodedParser, (req, res) => {
         eval(fs.readFileSync(__dirname + "/backend/register.js") + '')
     })
-app.post('/forget_password', urlencodedParser, (req, res) => {
-        eval(fs.readFileSync(__dirname + "/backend/forget_password.js") + '')
+app.post('/forgotPassword', urlencodedParser, (req, res) => {
+        eval(fs.readFileSync(__dirname + "/backend/forgotPassword.js") + '')
     })
 app.all('/login', urlencodedParser, (req, res) => {
         if (req.session.profile != undefined) {
@@ -155,17 +155,17 @@ app.all('/login', urlencodedParser, (req, res) => {
             eval(fs.readFileSync(__dirname + "/backend/login.js") + '')
 })
 app.all('/profile', urlencodedParser, (req, res) => {
-    functions.myNotifications(conn, req.session.profile.id, (notifs) => {
+    functions.myNotifications(conn, req.session.profile.id, (notifications) => {
         eval(fs.readFileSync(__dirname + "/backend/profile.js") + '')
     })
 })
 app.post('/profilePic', (req, res) => {
-        functions.myNotifications(conn, req.session.profile.id, (notifs) => {
+        functions.myNotifications(conn, req.session.profile.id, (notifications) => {
         eval(fs.readFileSync(__dirname + "/backend/profilePic.js") + '')
         })
 })
 app.all('/user_profile/:id', urlencodedParser, (req, res) => {
-        functions.myNotifications(conn, req.session.profile.id, (notifs) => {
-        eval(fs.readFileSync(__dirname + "/backend/public_profile.js") + '')
+        functions.myNotifications(conn, req.session.profile.id, (notifications) => {
+        eval(fs.readFileSync(__dirname + "/backend/loveFieldProfile.js") + '')
         })
 })

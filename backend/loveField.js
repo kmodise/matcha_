@@ -1,7 +1,7 @@
 function userprofilevalidate(result) {
     var i = 0;
     while (result[i]) {
-        if ((result[i].confirm !== 1))
+        if ((result[i].activate !== 1))
             result[i].valid = 0;
         else if ((!result[i].gender || !result[i].bio || result[i].profileImg == '/img/default.jpg' || result[i].age <= 0 || !result[i].orientation))
             result[i].valid = 0;
@@ -13,16 +13,16 @@ function userprofilevalidate(result) {
     return (result);
 }
 
-function confirmAccount(req, res, profile) {
+function activateAccount(req, res, profile) {
 
-    if (profile.confirm !== 1)
+    if (profile.activate !== 1)
     {
-        res.render('pages/login', {req: req, error: 'Please confirm your accont by email'})
+        res.render('pages/login', {req: req, error: 'Please activate your accont by email'})
         return false
     }
 
     if (!profile.gender || !profile.bio || !profile.orientation || profile.age <= 0 || profile.profileImg == '/img/default.jpg') {
-        res.render('pages/profile', { notif: notifs, error: 'complete your account first', profile: profile, like: 'none', visit: 'none' })
+        res.render('pages/profile', { notif: notifications, error: 'complete your account first', profile: profile, like: 'none', visit: 'none' })
         return false
     }
     else
@@ -251,7 +251,7 @@ else {
                 });
             }
 
-            res.render('pages/loveField', {profile: req.session.profile, users: result, notif: notifs })
+            res.render('pages/loveField', {profile: req.session.profile, users: result, notif: notifications })
         })
     })
 }

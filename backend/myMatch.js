@@ -31,24 +31,14 @@ function checkmatchs(user_id, callback){
     })
 }
 
-function checkonline(){
-	
-	if (user[req.params.id])
-		online = 1;
-	else 
-		online = 0
-	return (online)
-	
-}
 
 checkmatchs(req.session.profile.id, function(ids) {
     if (ids == 'none')
-    res.render('pages/myMatch', {req: req, match: 'none', notif: notifs})
+    res.render('pages/myMatch', {req: req, match: 'none', notif: notifications})
     else
     {
         conn.query( "SELECT * from `users` where `id` IN "+ ids, function( err, matchs ) { if (err) throw err
-        online = checkonline()
-        res.render('pages/myMatch', {req: req, match: matchs, notif: notifs, online: online}) }) 
+        res.render('pages/myMatch', {req: req, match: matchs, notif: notifications}) }) 
     }
 })
 

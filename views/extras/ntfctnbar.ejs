@@ -5,9 +5,9 @@ var socket = io('http://localhost:3000');
 
 
 <% if (Array.isArray(notif) == false) { %>
-var id = <%- notif %> ;
+var id = <%= notif %> ;
 <% } else { %>
-var id = <%- notif[0].user_id %> ;
+var id = <%= notif[0].user_id %> ;
 <% }  %>
 
 </script>

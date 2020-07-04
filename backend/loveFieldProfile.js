@@ -10,7 +10,7 @@ function	check(table, user_id, secondUsrId, result)
 	})
 }
 
-function	createnotif(table)
+function	makeNotification(table)
 {
 	var name = req.session.profile.username;
 	if (table == 'likes')
@@ -37,11 +37,11 @@ function	createnotif(table)
 function	notif(msg)
 {
 	
-		conn.query('INSERT INTO notifs (user_id, secondUsrId, notif) VALUES (?, ?, ?) ', [req.params.id, req.session.profile.id, msg], (err) => { if (err) throw err })
+		conn.query('INSERT INTO notifications (user_id, secondUsrId, notif) VALUES (?, ?, ?) ', [req.params.id, req.session.profile.id, msg], (err) => { if (err) throw err })
 		console.log(user[req.params.id])
 		if (user[req.params.id])
 		{
-	    	conn.query('SELECT date FROM notifs WHERE user_id=? AND secondUsrId=? AND notif=?', [req.params.id, req.session.profile.id, msg], (err, date) => { if (err) throw err 
+	    	conn.query('SELECT date FROM notifications WHERE user_id=? AND secondUsrId=? AND notif=?', [req.params.id, req.session.profile.id, msg], (err, date) => { if (err) throw err 
 			user[req.params.id].emit('notification', {secondUsrId: req.session.profile.id, not: msg, date: date[0].date.getFullYear()+'-'+date[0].date.getUTCMonth()+'-'+date[0].date.getDate()+'T'+date[0].date.getHours()}); })
 			
 		}
@@ -62,26 +62,15 @@ function score(val) {
 	})
 }
 
-function insertinto(table) {
+function insertInto(table) {
 	conn.query('INSERT INTO ' + table + ' (user_id, secondUsrId) VALUES (?,?) ', [req.session.profile.id, req.params.id], (err) => { if (err) throw err })
-	createnotif(table);
+	makeNotification(table);
 }
-function deletefrom(table) {
+function removeFrom(table) {
 	conn.query('DELETE FROM ' + table + ' WHERE user_id = ? AND secondUsrId = ?', [req.session.profile.id, req.params.id], (err) => { if (err) throw err })
-	createnotif('dislike');
+	makeNotification('dislike');
 }
 
-function checkonline(){
-	if (req.session.profile.id == req.params.id)
-		online = 1;
-	else if (user[req.params.id])
-		online = 1;
-	
-		else 
-		online = 0
-	return (online)
-	
-}
 
 function checklike(user_id, secondUsrId, result) {
 	var a = 0
@@ -117,7 +106,7 @@ if (req.body.like == '') {
 			return;
 		else {
 			score('add')
-			insertinto('likes')
+			insertInto('likes')
 		}
 	})
 }
@@ -128,7 +117,7 @@ if (req.body.dislike == '') {
 		else {
 
 			score('subtract')
-			deletefrom('likes')
+			removeFrom('likes')
 		}
 	})
 }
@@ -137,14 +126,14 @@ if (req.body.block)
 {
 	check('block', req.session.profile.id, req.params.id, (block) => {
 		if (block == 0)
-			insertinto('block')
+			insertInto('block')
 		else
-			deletefrom('block')
+			removeFrom('block')
 	})
 }
 
 if ((req.session.profile.id != req.params.id) && !req.body.like && !req.body.dislike)
-	insertinto('visits')
+	insertInto('visits')
 
 conn.query('SELECT * FROM users WHERE id = ?', [req.params.id], (err, result) => {
 	if (err) throw err
@@ -157,9 +146,7 @@ conn.query('SELECT * FROM users WHERE id = ?', [req.params.id], (err, result) =>
 			checklike(req.session.profile.id, req.params.id, (like) => {
 				check('block', req.session.profile.id, req.params.id, (block) => {
 					
-
-				var online = checkonline();
-				res.render('pages/public_profile', {notif: notifs, block: block, req: req, like: like, profile: result[0], tag: resultag, online: online })
+				res.render('pages/loveFieldProfile', {notif: notifications, block: block, req: req, like: like, profile: result[0], tag: resultag})
 			})})
 		})
 	}

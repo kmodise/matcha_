@@ -28,10 +28,10 @@ function notifmsg(user_id, secondUsrId, name) {
         if (block.length == 0)
         {
             var msg = name +' HAS SENT YOU A NEW MESSAGE'
-            conn.query('INSERT INTO notifs (user_id, secondUsrId, notif) VALUES (?, ?, ?) ', [secondUsrId, user_id, msg], function (err) { if (err) throw err })
+            conn.query('INSERT INTO notifications (user_id, secondUsrId, notif) VALUES (?, ?, ?) ', [secondUsrId, user_id, msg], function (err) { if (err) throw err })
             if (user[secondUsrId])
             {
-                conn.query('SELECT date FROM notifs WHERE user_id=? AND secondUsrId=? AND notif=?', [secondUsrId, user_id, msg], function (err, date) { if (err) throw err 
+                conn.query('SELECT date FROM notifications WHERE user_id=? AND secondUsrId=? AND notif=?', [secondUsrId, user_id, msg], function (err, date) { if (err) throw err 
                 user[secondUsrId].emit('notification', {secondUsrId: user_id, not: msg, date:date[0].date}); })
             }
         }
@@ -47,7 +47,6 @@ socket.on('message', function (message, room) {
     });
 });
 
-socket.on('disconnect', function(){
-    conn.query('UPDATE users SET active=CURRENT_TIMESTAMP WHERE id=?', [socket.myid], function (err) { if (err) throw err })
+socket.on('disconnect', () => {
     delete user[socket.myid];
 });

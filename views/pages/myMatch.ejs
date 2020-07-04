@@ -16,11 +16,11 @@
                 <div>
                 <div>
                   <div>
-                      <p><%-match[i].age%>years old</p>
+                      <p><%=match[i].age%>years old</p>
           
-                    <h5><%- match[i].name%></h5>
+                    <h5><%= match[i].lastname%></h5>
           
-                    <button type="button" onclick="location.href='<%-'/chat/'+ match[i].id %> ' ">Chat</button>
+                    <button type="button" onclick="location.href='<%='/chat/'+ match[i].id %> ' ">Chat</button>
 
                   </div>
                 </div>

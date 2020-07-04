@@ -1,7 +1,7 @@
 module.exports = {
 
-    getlikes: function (conn, user_id, callback) {
-        conn.query('SELECT * FROM likes WHERE secondUsrId = ?', [user_id], function (err, row) {
+    myLikes: (conn, user_id, callback) => {
+        conn.query('SELECT * FROM likes WHERE secondUsrId = ?', [user_id], (err, row) => {
             if (err) throw err
             if (row.length == 0)
                 return callback('none')
@@ -12,7 +12,7 @@ module.exports = {
                 if (row[i])
                     ids += ', ';
             } ids += ')'
-            conn.query("SELECT * from `users` where `id` IN " + ids, function (err, like) {
+            conn.query("SELECT * from `users` where `id` IN " + ids, (err, like) => {
                 if (err) throw err
                 return callback(like);
             })
@@ -20,17 +20,17 @@ module.exports = {
     },
 
     myNotifications: function (conn, id, callback) {
-        conn.query('SELECT * FROM notifs WHERE user_id = ? ORDER BY date DESC LIMIT 20', [id], function (err, notifs) {
+        conn.query('SELECT * FROM notifications WHERE user_id = ? ORDER BY date DESC LIMIT 20', [id], (err, notifications) => {
             if (err) throw err
-            if (notifs.length == 0)
+            if (notifications.length == 0)
                 return callback(id);
             else
-                return callback(notifs);
+                return callback(notifications);
         })
     },
 
-    getvisits: function (conn, user_id, callback){
-        conn.query('SELECT * FROM `visits` WHERE secondUsrId = ? ',[user_id], function (err, row) {
+    myVisitors: function (conn, user_id, callback){
+        conn.query('SELECT * FROM `visits` WHERE secondUsrId = ? ',[user_id], (err, row) => {
             if (err) throw err
             if (row.length == 0)
                 return callback('none')
@@ -42,13 +42,13 @@ module.exports = {
                     ids += ', '
             } 
             ids += ')'
-            conn.query("SELECT * FROM `users` WHERE `id` IN" + ids, function (err, visit){
+            conn.query("SELECT * FROM `users` WHERE `id` IN" + ids, (err, visit) => {
                 if (err) throw err
                 return callback(visit);
             })
             })
         }, 
- checkmatch: function(con, user_id, secondUsrId, callback){
+ checkmatch: (con, user_id, secondUsrId, callback) => {
     var a = 0
     var b = 0
      con.query('SELECT * FROM likes WHERE user_id = ? AND secondUsrId = ?', [user_id, secondUsrId], function (err, rows) { if (err) throw err 

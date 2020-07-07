@@ -1,6 +1,3 @@
-socket.on('send-chat-message', message => {
-    console.log(message)
-})
 
 socket.on('setUserId', function (userId) {
     user[userId] = socket;
@@ -40,7 +37,7 @@ function notifmsg(user_id, secondUsrId, name) {
 
 socket.on('message', function (message, room) {
     message = escapehtml(message);
-    conn.query("INSERT INTO `chat` (message, user_id, secondUsrId) VALUES (?,?,?)", [message, socket.user_id, socket.secondUsrId], function (err) { 
+    conn.query("INSERT INTO `messages` (message, user_id, secondUsrId) VALUES (?,?,?)", [message, socket.user_id, socket.secondUsrId], function (err) { 
         if (err) throw err;
         notifmsg(socket.user_id, socket.secondUsrId, socket.userName)
         io.to(room).emit('message', {userName: socket.userName, message: message}); 

@@ -19,7 +19,7 @@ module.exports = {
         })
     },
 
-    myNotifications: function (conn, id, callback) {
+    myNotifications: (conn, id, callback) => {
         conn.query('SELECT * FROM notifications WHERE user_id = ? ORDER BY date DESC LIMIT 20', [id], (err, notifications) => {
             if (err) throw err
             if (notifications.length == 0)
@@ -29,7 +29,7 @@ module.exports = {
         })
     },
 
-    myVisitors: function (conn, user_id, callback){
+    myVisitors: (conn, user_id, callback) => {
         conn.query('SELECT * FROM `visits` WHERE secondUsrId = ? ',[user_id], (err, row) => {
             if (err) throw err
             if (row.length == 0)
@@ -51,10 +51,10 @@ module.exports = {
  checkmatch: (con, user_id, secondUsrId, callback) => {
     var a = 0
     var b = 0
-     con.query('SELECT * FROM likes WHERE user_id = ? AND secondUsrId = ?', [user_id, secondUsrId], function (err, rows) { if (err) throw err 
+     con.query('SELECT * FROM likes WHERE user_id = ? AND secondUsrId = ?', [user_id, secondUsrId], (err, rows) => { if (err) throw err 
         if (rows.length == 1)
             a = 1;       
-        con.query('SELECT * FROM likes WHERE user_id = ? AND secondUsrId = ?', [secondUsrId, user_id], function (err, rows) { if (err) throw err 
+        con.query('SELECT * FROM likes WHERE user_id = ? AND secondUsrId = ?', [secondUsrId, user_id], (err, rows) => { if (err) throw err 
         if (rows.length == 1)
             b = 1;
         if (a == 1 && b == 1)

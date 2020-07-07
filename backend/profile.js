@@ -66,7 +66,7 @@ else if (req.body.edit && req.body.general === 'update') {
         else if (req.body.edit === '2')
                 dataUpdate('firstname', change)
         else if (req.body.edit === '3')
-                dataUpdate('name', change)
+                dataUpdate('Lastname', change)
         else if (req.body.edit === '4') {
                 if (validator.isEmail(change)) {
                         sql = 'SELECT * FROM `users` WHERE email = ?'

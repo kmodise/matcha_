@@ -7,8 +7,7 @@ var bcrypt = require('bcrypt')
 email = req.body.email
 sql = 'SELECT * FROM users WHERE email = ?'
     conn.query(sql, [email],
-    function (error, result) 
-    { 
+    (error, result) => { 
     if (error) throw error
     if (result.length > 0)
     {
@@ -25,17 +24,16 @@ sql = 'SELECT * FROM users WHERE email = ?'
             from: "kgosaneli@gmail.com", to: email, subject: "Matcha password resset",
             html: '<html><body>  hello '+result[0].username+' here is your new password :  '+newpass+'</body></html>'
         }
-        Transport.sendMail(mail, function(error, response){
+        Transport.sendMail(mail, (error, response) => {
             if (error) { 
                 res.render('pages/login.ejs', {req: req, error: "Mail failed"}) 
             }
             else {
-                bcrypt.hash(newpass, 10, function(err, hash) { 
+                bcrypt.hash(newpass, 10, (err, hash) => { 
                     if (err) throw err
                     sql = 'UPDATE users SET password = ? WHERE email = ?'
                     conn.query(sql, [hash, email],
-                    function (error, result) 
-                    { 
+                    (error, result) => { 
                     if (error) throw error }) })
                         var msg = "check your email"
                 res.render('pages/login.ejs', {req: req, success: msg})

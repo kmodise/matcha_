@@ -26,121 +26,107 @@
             <% i++ } } %>
     </div>
 </div>
-   <h1>full name: <%=profile.firstname %> <%=profile.lastname %></h1>
+   <h1 style="text-align: center;"><%=profile.firstname %> <%=profile.lastname %></h1>
     <div>
-        <% if (typeof error !== 'undefined' && error && error !== 'none') { 
-            %>
-  <%=error%>
+        
   
   </button>
- </div>
-        <% } %>
-        <% if (typeof success !== 'undefined' && success && success !== 'none') { 
-            %> 
-  <%=success%>
-        <% } %>
-    </div>
+ 
 
-    <div>
-        <div>
+    <div style="text-align: center;">
+        <div  class="update" style="width: 90%;">
+            <img src="<%=profile.profileImg%>" style="height: 100%;">
             <div>
-                <div  class="update" style="width: 90%;">
-                    <img src="<%=profile.profileImg%>" style="height: 100%;">
+                    <form action="/profile" method="POST">
+                        <textarea placeholder="<%=profile.bio%>" name="bio" maxlength="500" rows="2" value="<%=profile.bio%>"></textarea>
+                        <input type="submit" name="sub_bio" value="update">
+                    </form>
+                </div>
+            <ul>
+                <h3>
+                        <form action="/profile" method="POST">
+                            <input style="width: 70px; display: inline-block;" type="number" name="age" value="<%= profile.age%>">
+                            <input  type="submit" name="sub_age" value="update">
+                        </form>
+                </h3>
+                <h3>
+                    <form action="/profile" method="POST">
+                        <select name="gender">
+                            <% if (!profile.gender) { %>
+                            <option> Select Gender </option>
+                            <% } else { %>
+                            <option><%= profile.gender %> </option><% } %>
+                            <option> Man </option>
+                            <option> Woman </option>
+                        </select>
+                        <input  name="sub_gender" type="submit" value="update">
+                    </form>
+                    <div class="bio"><%=profile.gender%></div>
+                </h3>
+                <h3>
+                    <form action="/profile" method="POST">
+                        <select  name="orientation">
+                            <% if (!profile.gender) { %>
+                            <option> Select Gender </option>
+                            <% } else { %>
+                            <option><%= profile.orientation %> </option><% } %>
+                            <option>Heterosexual</option>
+                            <option>Homosexual</option>
+                            <option>Bisexual</option>
+                        </select>
+                        <input  name="sub_orientation" type="submit" value="update">
+                    </form>
+                    <div><%=profile.orientation%></div>
+                </h3>
+            </ul>
+            
+                <div>
+                    <h2>registration details</h2>
+                    <div>
+                        <form action="/profile" method="post">
+                            <select  name="edit" id='updatelist' onchange="placeholder()">
+                                <option value='1'> Username </option>
+                                <option value='2'> Fistname </option>
+                                <option value='3'> Lastname </option>
+                                <option value='4'> Email </option>
+                                <option value='5'> Password </option>
+                            </select>
+                            <div >
+                                <input  type="text" name="changement" id='update' required>
+                                <input  type="submit" name="general" value="update" id="change">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            
+                <div>
+                    <h2>My Interests</h2>
                     <div>
                         <div>
-                            <form action="/profile" method="POST">
-                                <textarea placeholder="<%=profile.bio%>" name="bio" maxlength="500" rows="2" value="<%=profile.bio%>"></textarea>
-                                <input type="submit" name="sub_bio" value="update">
+                            <form action="/profile" method="post">
+                                <input type="text" name="newtag" id='newtag' maxlength="40">
+                                <input  type="submit" name="general" value="add" id="tagbutton">
                             </form>
                         </div>
-                    </div>
-                    <ul>
-                        <li>
-                                <form action="/profile" method="POST">
-                                    <input style="width: 70px; display: inline-block;" type="number" name="age" value="<%= profile.age%>">
-                                    <input  type="submit" name="sub_age" value="update">
-                                </form>
-                        </li>
-                        <li>
-                            <form action="/profile" method="POST">
-                                <select name="gender">
-                                    <% if (!profile.gender) { %>
-                                    <option> Select Gender </option>
-                                    <% } else { %>
-                                    <option><%= profile.gender %> </option><% } %>
-                                    <option> Man </option>
-                                    <option> Woman </option>
-                                </select>
-                                <input  name="sub_gender" type="submit"
-                                    value="update">
-                            </form>
-                            <div class="bio"><%=profile.gender%></div>
-                        </li>
-                        <li>
-                            <form action="/profile" method="POST">
-                                <select  name="orientation">
-                                    <% if (!profile.gender) { %>
-                                    <option> Select Gender </option>
-                                    <% } else { %>
-                                    <option><%= profile.orientation %> </option><% } %>
-                                    <option>Heterosexual</option>
-                                    <option>Homosexual</option>
-                                    <option>Bisexual</option>
-                                </select>
-                                <input  name="sub_orientation" type="submit" value="update">
-                            </form>
-                            <div><%=profile.orientation%></div>
-                        </li>
-                    </ul>
-                    
                         <div>
-                            <h2>registration details</h2>
+                            <% 
+                                if (profile && profile.tag) { 
+                                    i = 0
+                                while (profile.tag[i]){
+                                        %>
                             <div>
                                 <form action="/profile" method="post">
-                                    <select  name="edit" id='updatelist' onchange="placeholder()">
-                                        <option value='1'> Username </option>
-                                        <option value='2'> Fistname </option>
-                                        <option value='3'> Name </option>
-                                        <option value='4'> Email </option>
-                                        <option value='5'> Password </option>
-                                    </select>
-                                    <div >
-                                        <input  type="text" name="changement" id='update' required>
-                                        <input  type="submit" name="general" value="update" id="change">
-                                    </div>
+                                    I like <%= profile.tag[i].tag %>
+                                    <button type="submit"  name="deltag" value="<%= profile.tag[i++].id %>">x</button>
                                 </form>
                             </div>
+                            <% }} %>
                         </div>
-                    
-                        <div>
-                            <h2>My Interests</h2>
-                            <div>
-                                <div>
-                                    <form action="/profile" method="post">
-                                        <input type="text" name="newtag" id='newtag' maxlength="40">
-                                        <input  type="submit" name="general" value="add" id="tagbutton">
-                                    </form>
-                                </div>
-                                <div>
-                                    <% 
-                                        if (profile && profile.tag) { 
-                                            i = 0
-                                        while (profile.tag[i]){
-                                             %>
-                                    <div>
-                                        <form action="/profile" method="post">
-                                            I like <%= profile.tag[i].tag %>
-                                            <button type="submit"  name="deltag" value="<%= profile.tag[i++].id %>">x</button>
-                                        </form>
-                                    </div>
-                                    <% }} %>
-                                </div>
-                            </div>
+                    </div>
 
-                        </div>
+                </div>
                     
                 </div>
-            </div>
             <div>
                 <div>
 
@@ -155,17 +141,8 @@
                             </form>
                         </div>
                     </div>
-                   
                 </div>
-                <div> 
-                    <div >
-                        <div>
-                            
-                    </div>
-                </div>
-            </div>
         </div>
-    </div>
 
     <% include ../extras/footer.ejs %>
 
@@ -187,7 +164,7 @@
                 var result = '<%=profile.firstname %>'
             }
                 else if (option == '3'){
-                    var result = '<%=profile.name %>'
+                    var result = '<%=profile.lastname %>'
                 }
             else if (option == '4'){
                 var result = '<%= profile.email %>'

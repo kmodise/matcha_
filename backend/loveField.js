@@ -13,21 +13,7 @@ function userprofilevalidate(result) {
     return (result);
 }
 
-function activateAccount(req, res, profile) {
 
-    if (profile.activate !== 1)
-    {
-        res.render('pages/login', {req: req, error: 'Please activate your accont by email'})
-        return false
-    }
-
-    if (!profile.gender || !profile.bio || !profile.orientation || profile.age <= 0 || profile.profileImg == '/img/default.jpg') {
-        res.render('pages/profile', { notif: notifications, error: 'complete your account first', profile: profile, like: 'none', visit: 'none' })
-        return false
-    }
-    else
-        return true
-}
 function    blocked(result, myid, callback)
 {
     conn.query('SELECT * FROM `block` WHERE user_id = ?', [myid], function(err, block) { if (err) throw err;
@@ -57,7 +43,7 @@ function finder(gender, orientation1, orientation2, myid, callback) {
         })
     })
 }
-
+////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 function orientation(orientation, gender, callback) {
     if (orientation == "Heterosexual") {
         if (gender == "Man"){
@@ -96,163 +82,19 @@ function orientation(orientation, gender, callback) {
     }
 }
 
-function descendingtags(first, second) {
-    if (first.scoretag == second.scoretag)
-        return 0;
-    if (first.scoretag > second.scoretag)
-        return -1;
-    else
-        return 1;
-}
-function ascendingdist(first, second) {
-    if (first.distance == second.distance)
-        return 0;
-    if (first.distance < second.distance)
-        return -1;
-    else
-        return 1;
-}
-function ascendingscore(first, second) {
-    if (first.score == second.score)
-        return 0;
-    if (first.score > second.score)
-        return -1;
-    else
-        return 1;
-}
-
-function tritags(profile, result) {
-    i = 0
-    while (result[i]) {
-        result[i].scoretag = 0
-        var a = 0;
-        while (profile.tag[a]) {
-            var e = 0;
-            while (result[i].tags[e]) {
-                if (result[i].tags[e].tag == profile.tag[a].tag)
-                    result[i].scoretag++;
-                e++;
-            }
-            a++;
-        }
-        i++;
-    }
-    result = result.sort(descendingtags)
-
-    return (result);
-}
-
-function settags(result, callback) {
-    conn.query('SELECT * FROM tags', function (err, tag) {
-        if (err) throw err;
-        var i = 0;
-        tags = new Array();
-        while (result[i]) {
-            var onetag = tag.filter(function (val, a, tag) { return (val.user_id == result[i].id) })
-            result[i].tags = onetag
-            i++;
-        }
-        return (callback(result))
-    })
-}
-
-function triage(first, second)
-{
-    if (first.age == second.age)
-        return 0;
-    if (first.age < second.age)
-        return -1;
-    else
-        return 1; 
-}
 
 
 
 
-
-if (req.session.profile == undefined)
+if (req.session.profile == undefined){
     res.redirect('/')
-
-
-
-
+}
+    
 else {
 
-    orientation(req.session.profile.orientation, req.session.profile.gender, function (result1) {
-
-
-        result1 = userprofilevalidate(result1)
-        settags(result1, function (result) {
-            tritags(req.session.profile, result)
-
-            if (req.body.agemax) {
-                if (!isNaN(req.body.agemax)) {
-                    result = result.filter(function (val, i, result) {
-                        return (val.age <= req.body.agemax);
-                    })
-                };
-            }
-            if (req.body.agemin) {
-                if (!isNaN(req.body.agemin)) {
-                    result = result.filter(function (val, i, result) {
-                        return (val.age >= req.body.agemin);
-                    })
-                };
-            }
-            if (req.body.tri == "Age"){
-                result = result.sort(triage)
-            }
-            else if (req.body.tri == "Location"){
-                console.log("It is");
-            }
-            else if (req.body.tri == "Score"){
-                result = result.sort(ascendingscore)
-            }
-            
-            else if (req.body.tri == "Tags"){
-
-
-            tritags(req.session.profile, result)
-            }
-            if (req.body.scoremin) {
-                if (!isNaN(req.body.scoremin)) {
-                    result = result.filter(function (val, i, result) {
-                        return (val.score >= req.body.scoremin);
-                    })
-                };
-            }
-            if (req.body.scoremax) {
-                if (!isNaN(req.body.scoremax)) {
-                    result = result.filter(function (val, i, result) {
-                        return (val.score <= req.body.scoremax);
-                    })
-                };
-            }
-            if (req.body.tags) {
-                var tags = escapehtml(req.body.tags)
-
-                tabtags = tags.split(";")
-                result = result.filter(function (val, i, result) {
-                    var nbtagmatch = 0
-                    j = 0
-                    while (tabtags[j]) {
-                        var e = 0
-                        while (val.tags[e]) {
-                            if (tabtags[j] == val.tags[e].tag)
-                                nbtagmatch++
-                            e++
-                        }
-                        j++
-                    }
-                    if (nbtagmatch >= j)
-                        return (true)
-                    else
-                        return (false)
-                });
-            }
-
+    orientation(req.session.profile.orientation, req.session.profile.gender, (result) => { userprofilevalidate(result)
+        
             res.render('pages/loveField', {profile: req.session.profile, users: result, notif: notifications })
-        })
+        
     })
 }
-

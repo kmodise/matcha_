@@ -5,29 +5,29 @@
     <% include ../extras/navbar.ejs %>
 
     
-        <div>
+        <div style="text-align: center;">
           
             <img src="<%=profile.profileImg%>">
           
         </div>
         
-      <div>
-        <h5><%=profile.firstname%> <%=profile.lastname%></h5>
+      <div style="text-align: center;">
+        <h3><%=profile.firstname%> <%=profile.lastname%></h3>
         <p><%=profile.bio%></p>
       </div>
-      <ul>
-        <li><%=profile.age%>years</li>
-        <li><%=profile.gender%></li>
+      <ul style="text-align: center;">
+        <h3><%=profile.age%>years</h3>
+        <h3><%=profile.gender%></h3>
         
-        <%if (tag && tag[0]){%><li><%i = 0
+        <%if (tag && tag[0]){%><%i = 0
           while (tag[i]){ %>
             <div>I like <%=tag[i].tag%></div>
 
-          <% i++ }} %></li>
-          <li><%=profile.score%> popularity points</li>
+          <% i++ }} %>
+         <h3><%=profile.score%> popularity points</h3>
       </ul>
      
-      <div>
+      <div style="text-align: center;">
         <form action="/user_profile/<%= profile.id %>" method="post">
          <input type="submit" name="block" value="Block" />
        </form>
@@ -35,11 +35,11 @@
       <div>
         <form action="/user_profile/<%= profile.id %>" method="post">
           <div>
-            <div">
+            <div style="text-align: center;">
              <strong>like</strong> <input type="submit" id="like" name="like" value=""
                 />
             </div>
-            <div >
+            <div style="text-align: center;">
              <strong>dislike</strong> <input type="submit" id="dislike" name="dislike" value=""
                 />
             </div>

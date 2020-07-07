@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 
-<body id="">
+<body>
         <% include ../extras/navbar.ejs %>
 
 <div id="chatZone">
@@ -59,7 +59,6 @@
 
       
     socket.emit('room', user_id, secondUsrId);
-    document.title = 'Chatting - ' + document.title;
 
     socket.emit('connectedUser', userName, user_id, secondUsrId);
 

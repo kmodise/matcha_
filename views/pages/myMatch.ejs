@@ -2,38 +2,31 @@
 
 <body >
 
-
     <% include ../extras/navbar.ejs %>
         
         <div>
-    
             <div>
                 <div>
-          
               <% var i = 0;
               if (match != 'none') {
                    while (match[i]) { %>
                 <div>
                 <div>
                   <div>
-                      <p><%=match[i].age%>years old</p>
           
-                    <h5><%= match[i].lastname%></h5>
+                    <h3><%= match[i].firstname%> <%= match[i].lastname%></h3> 
           
-                    <button type="button" onclick="location.href='<%='/chat/'+ match[i].id %> ' ">Chat</button>
+                    <button type="button" onclick="location.href='<%='/chat/'+ match[i].id %> ' ">message</button>
 
                   </div>
                 </div>
                 </div>
-          
-          
                 <%  i++ } } else { %>
                     <div><h1>You're Still Lonenly :-( <a href="/loveField">its open season, Go Hunting!!!!</a></h1></div>
                     <% } %>
             </div>
-            
           </div>
-            </div>
+     </div>
 
 
     <% include ../extras/footer.ejs %>

@@ -55,9 +55,9 @@ function score(val) {
 		if (err) throw err;
 		score = score[0].score;
 		if (val == 'add')
-			score += 5;
+			score += 10;
 		else if (val == 'subtract')
-			score -= 5
+			score -= 10
 		conn.query('UPDATE `users` SET score=?  WHERE id = ?', [score, req.params.id], (err, score) => { if (err) throw err; })
 	})
 }

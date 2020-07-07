@@ -121,7 +121,7 @@ app.get('/chat/:id', (req, res) => {
         }
         else {
             conn.query("SELECT * from `users` where id = ?", [req.params.id], ( err, user2 ) => { if (err) throw err
-                conn.query('SELECT * FROM `chat` WHERE user_id = ? OR secondUsrId = ?', [req.params.id, req.params.id], (err, chat) => { if (err) throw err 
+                conn.query('SELECT * FROM `messages` WHERE user_id = ? OR secondUsrId = ?', [req.params.id, req.params.id], (err, chat) => { if (err) throw err 
                 functions.checkmatch(conn, req.session.profile.id, req.params.id, (match) => {
                     if (match == 0)
                         res.redirect('/')
@@ -135,7 +135,6 @@ app.get('/chat/:id', (req, res) => {
     })
 }
     })
-               // 6105010940089         8703175728089
 app.post('/', (req, res) => {
     if (req.body.message === undefined || req.body.message === '') {
         res.redirect('/')

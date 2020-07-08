@@ -82,19 +82,8 @@ function orientation(orientation, gender, callback) {
     }
 }
 
-
-
-
-
-if (req.session.profile == undefined){
-    res.redirect('/')
-}
-    
-else {
-
-    orientation(req.session.profile.orientation, req.session.profile.gender, (result) => { userprofilevalidate(result)
+ orientation(req.session.profile.orientation, req.session.profile.gender, (result) => { userprofilevalidate(result)
         
             res.render('pages/loveField', {profile: req.session.profile, users: result, notif: notifications })
         
     })
-}

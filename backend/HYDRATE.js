@@ -11,13 +11,13 @@
   var   orientation = 'Heterosexual';
   var   bio = 'dummy account';
   var   age = '21';
-  var   score = 5;
+  var   score = 50;
   var   profileImg = '/img/dummy.jpeg'
 
   while (i <= 500) {
 
       sql = 'INSERT INTO `users` (`username`, `firstname` , `lastname`, `password`, `email`, `vkey`, `activate`, `gender`, `orientation`, `bio`, `age`, `score`, `profileImg`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-      conn.query(sql, [username, firstname, name, password, email, key, activate, gender, orientation, bio, age, score, profileImg], function (err, result) { if (err) throw err })
+      conn.query(sql, [username, firstname, lastname, password, email, key, activate, gender, orientation, bio, age, score, profileImg], function (err, result) { if (err) throw err })
       sql = 'INSERT INTO `tags` (tag, user_id) VALUES (?,?)'
       conn.query(sql, ["gamming", i], function (err, result) { if (err) throw err })
       i++;

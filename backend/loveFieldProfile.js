@@ -37,17 +37,8 @@ function	makeNotification(table)
 function	notif(msg)
 {
 	
-		conn.query('INSERT INTO notifications (user_id, secondUsrId, notif) VALUES (?, ?, ?) ', [req.params.id, req.session.profile.id, msg], (err) => { if (err) throw err })
-		console.log(user[req.params.id])
-		if (user[req.params.id])
-		{
-	    	conn.query('SELECT date FROM notifications WHERE user_id=? AND secondUsrId=? AND notif=?', [req.params.id, req.session.profile.id, msg], (err, date) => { if (err) throw err 
-			user[req.params.id].emit('notification', {secondUsrId: req.session.profile.id, not: msg, date: date[0].date.getFullYear()+'-'+date[0].date.getUTCMonth()+'-'+date[0].date.getDate()+'T'+date[0].date.getHours()}); })
-			
-		}
-		else 
-		console.log("notification send")
-	
+		conn.query('INSERT INTO notifications (user_id, secondUsrId, notif) VALUES (?, ?, ?) ', [req.params.id, req.session.profile.id, msg])
+		
 }
 
 function score(val) {
@@ -70,7 +61,6 @@ function removeFrom(table) {
 	conn.query('DELETE FROM ' + table + ' WHERE user_id = ? AND secondUsrId = ?', [req.session.profile.id, req.params.id], (err) => { if (err) throw err })
 	makeNotification('dislike');
 }
-
 
 function checklike(user_id, secondUsrId, result) {
 	var a = 0
@@ -97,8 +87,6 @@ function checklike(user_id, secondUsrId, result) {
 		})
 	})
 }
-
-
 
 if (req.body.like == '') {
 	checklike(req.session.profile.id, req.params.id, (like) => {

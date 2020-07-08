@@ -1,10 +1,7 @@
 
-socket.on('setUserId', function (userId) {
-    user[userId] = socket;
-    socket.myid = userId;
-})
 
-socket.on('room', function (user_id, secondUsrId) {
+
+socket.on('room', (user_id, secondUsrId) => {
     if (user_id > secondUsrId)
         room = user_id + secondUsrId;
     else
@@ -12,7 +9,7 @@ socket.on('room', function (user_id, secondUsrId) {
     socket.join(room);
 });
 
-socket.on('connectedUser', function(userName, user_id, secondUsrId) {
+socket.on('connectedUser', (userName, user_id, secondUsrId) => {
     socket.userName = userName;
     socket.user_id = user_id;
     socket.secondUsrId = secondUsrId;
@@ -20,30 +17,22 @@ socket.on('connectedUser', function(userName, user_id, secondUsrId) {
 });
 
 
-function notifmsg(user_id, secondUsrId, name) {
-    conn.query('SELECT * FROM block WHERE user_id = ? AND secondUsrId = ?', [secondUsrId, user_id], function (err, block) { if (err) throw err 
+function messageInfo(user_id, secondUsrId, name) {
+    conn.query('SELECT * FROM block WHERE user_id = ? AND secondUsrId = ?', [secondUsrId, user_id], (err, block) => { if (err) throw err 
         if (block.length == 0)
         {
-            var msg = name +' HAS SENT YOU A NEW MESSAGE'
-            conn.query('INSERT INTO notifications (user_id, secondUsrId, notif) VALUES (?, ?, ?) ', [secondUsrId, user_id, msg], function (err) { if (err) throw err })
-            if (user[secondUsrId])
-            {
-                conn.query('SELECT date FROM notifications WHERE user_id=? AND secondUsrId=? AND notif=?', [secondUsrId, user_id, msg], function (err, date) { if (err) throw err 
-                user[secondUsrId].emit('notification', {secondUsrId: user_id, not: msg, date:date[0].date}); })
-            }
+            var msg = 'message from ' + name
+            conn.query('INSERT INTO notifications (user_id, secondUsrId, notif) VALUES (?, ?, ?) ', [secondUsrId, user_id, msg], (err) => { if (err) throw err })
         }
     })
 }
 
-socket.on('message', function (message, room) {
+socket.on('message', (message, room) => {
     message = escapehtml(message);
-    conn.query("INSERT INTO `messages` (message, user_id, secondUsrId) VALUES (?,?,?)", [message, socket.user_id, socket.secondUsrId], function (err) { 
+    conn.query("INSERT INTO `messages` (message, user_id, secondUsrId) VALUES (?,?,?)", [message, socket.user_id, socket.secondUsrId], (err) => { 
         if (err) throw err;
-        notifmsg(socket.user_id, socket.secondUsrId, socket.userName)
-        io.to(room).emit('message', {userName: socket.userName, message: message}); 
+        messageInfo(socket.user_id, socket.secondUsrId, socket.userName)
+        io.to(room).emit('message', {userName: socket.userName, message: message});
     });
 });
 
-socket.on('disconnect', () => {
-    delete user[socket.myid];
-});

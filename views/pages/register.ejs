@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 
-
 <body>
         <% if (typeof error !== 'undefined' && error && error !== 'none') { 
             %>
@@ -10,17 +9,17 @@
             %>
               <%=success%>
         <% } %>
-        <form action="register" method="post">
-            <input type="username" name=username placeholder="Username" required autofocus>
-
+        <form action="register" method="post" style="text-align: center;">
+            <input type="username" name=username placeholder="Username" required>
+            <br>
             <input type="name"  name=firstname placeholder="firstname" required >
-
+            <br>
             <input type="name"  name=lastname placeholder="lastname" required >
-
+            <br>
             <input type="email" name=email placeholder="Email address" required>
-
+            <br>
             <input type="password" name="password" placeholder="Password" required>
-
+            <br>
            <p> <button type="submit">Register</button> </p>
             <p><a href="/login">Sign-in</a></p>
         </form>

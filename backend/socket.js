@@ -1,6 +1,3 @@
-
-
-
 socket.on('room', (user_id, secondUsrId) => {
     if (user_id > secondUsrId)
         room = user_id + secondUsrId;
@@ -17,7 +14,7 @@ socket.on('connectedUser', (userName, user_id, secondUsrId) => {
 });
 
 
-function messageInfo(user_id, secondUsrId, name) {
+function messageContent(user_id, secondUsrId, name) {
     conn.query('SELECT * FROM block WHERE user_id = ? AND secondUsrId = ?', [secondUsrId, user_id], (err, block) => { if (err) throw err 
         if (block.length == 0)
         {
@@ -31,7 +28,7 @@ socket.on('message', (message, room) => {
     message = escapehtml(message);
     conn.query("INSERT INTO `messages` (message, user_id, secondUsrId) VALUES (?,?,?)", [message, socket.user_id, socket.secondUsrId], (err) => { 
         if (err) throw err;
-        messageInfo(socket.user_id, socket.secondUsrId, socket.userName)
+        messageContent(socket.user_id, socket.secondUsrId, socket.userName)
         io.to(room).emit('message', {userName: socket.userName, message: message});
     });
 });

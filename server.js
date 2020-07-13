@@ -15,7 +15,6 @@ http = require("http")
 var server = http.createServer(app);
 var io = require("socket.io").listen(server);
 functions = require("./backend/functions.js")
-var request = require('request');
 
 app.set('view engine', 'ejs')
 
@@ -40,9 +39,8 @@ server.listen(3000, () => {
     console.log("port 3000 baybay");
 })
 
-
-urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(express.static('public'))
+urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(session({
@@ -84,7 +82,6 @@ app.get('/forgotPassword', (req, res) => {
     })
 app.get('/logout', (req, res) => {
         req.session.destroy()
-        req.session = 0;
         res.redirect('/')
     })
 

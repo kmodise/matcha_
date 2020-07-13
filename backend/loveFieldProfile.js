@@ -1,5 +1,4 @@
-function	check(table, user_id, secondUsrId, result)
-{
+function	check(table, user_id, secondUsrId, result){
 	conn.query('SELECT * FROM ' + table + ' WHERE user_id = ? AND secondUsrId = ?', [user_id, secondUsrId], (err, rows) => { if (err) throw err 
 		if (rows.length == 0){
 			return result(0);
@@ -10,11 +9,9 @@ function	check(table, user_id, secondUsrId, result)
 	})
 }
 
-function	makeNotification(table)
-{
+function	makeNotification(table){
 	var name = req.session.profile.username;
-	if (table == 'likes')
-	{
+	if (table == 'likes'){
 		checklike(req.session.profile.id, req.params.id, (like) => {
 			if (like == 1){
 				notif(name +' LIKES YOU!');
@@ -34,8 +31,7 @@ function	makeNotification(table)
 	else if (table == 'visits')
 		notif(name + ' CHECKED YOU OUT :)');
 }
-function	notif(msg)
-{
+function	notif(msg){
 	
 		conn.query('INSERT INTO notifications (user_id, secondUsrId, notif) VALUES (?, ?, ?) ', [req.params.id, req.session.profile.id, msg])
 		
@@ -55,34 +51,33 @@ function score(val) {
 
 function insertInto(table) {
 	conn.query('INSERT INTO ' + table + ' (user_id, secondUsrId) VALUES (?,?) ', [req.session.profile.id, req.params.id], (err) => { if (err) throw err })
-	makeNotification(table);
-}
+	makeNotification(table);}
 function removeFrom(table) {
 	conn.query('DELETE FROM ' + table + ' WHERE user_id = ? AND secondUsrId = ?', [req.session.profile.id, req.params.id], (err) => { if (err) throw err })
 	makeNotification('dislike');
 }
 
 function checklike(user_id, secondUsrId, result) {
-	var a = 0
-	var b = 0
+	var use1 = 0
+	var user2 = 0
 	conn.query('SELECT * FROM likes WHERE user_id = ? AND secondUsrId = ?', [user_id, secondUsrId], (err, rows) => {
 		if (err) throw err
 		if (rows.length == 1)
-			a = 1;
+			use1 = 1;
 
 		conn.query('SELECT * FROM likes WHERE user_id = ? AND secondUsrId = ?', [secondUsrId, user_id], (err, rows) => {
 			if (err) throw err
 			if (rows.length == 1)
-				b = 1;
+				user2 = 1;
 			if (user_id == secondUsrId)
 				return result(-1);
-			else if (a == 0 && b == 0)
+			else if (use1 == 0 && user2 == 0)
 				return result(0);
-			else if (a == 1 && b == 0)
+			else if (use1 == 1 && user2 == 0)
 				return result(1);
-			else if (a == 0 && b == 1)
+			else if (use1 == 0 && user2 == 1)
 				return result(2);
-			else if (a == 1 && b == 1)
+			else if (use1 == 1 && user2 == 1)
 				return result(3);
 		})
 	})
@@ -110,8 +105,7 @@ if (req.body.dislike == '') {
 	})
 }
 
-if (req.body.block)
-{
+if (req.body.block){
 	check('block', req.session.profile.id, req.params.id, (block) => {
 		if (block == 0)
 			insertInto('block')
@@ -120,9 +114,10 @@ if (req.body.block)
 	})
 }
 
-if ((req.session.profile.id != req.params.id) && !req.body.like && !req.body.dislike)
+if ((req.session.profile.id != req.params.id) && !req.body.like && !req.body.dislike){
 	insertInto('visits')
-
+}
+	
 conn.query('SELECT * FROM users WHERE id = ?', [req.params.id], (err, result) => {
 	if (err) throw err
 	if (result.length == 0)

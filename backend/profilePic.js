@@ -1,7 +1,6 @@
 uploadPic()
 
-function updatePic(column, change)
-{
+function updatePic(column, change){
     var sql = 'UPDATE users SET ' + column + ' = ? WHERE id = ?'
     conn.query(sql, [change, req.session.profile.id], (err) => { if (err) throw err })
     req.session.profile[column] = change

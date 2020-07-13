@@ -10,16 +10,14 @@
               <% var i = 0;
               if (match != 'none') {
                    while (match[i]) { %>
-                <div>
+                
                 <div>
                   <div>
-          
                     <h3><%= match[i].firstname%> <%= match[i].lastname%></h3> 
           
                     <button type="button" onclick="location.href='<%='/chat/'+ match[i].id %> ' ">message</button>
 
                   </div>
-                </div>
                 </div>
                 <%  i++ } } else { %>
                     <div><h1>You're Still Lonenly :-( <a href="/loveField">its open season, Go Hunting!!!!</a></h1></div>

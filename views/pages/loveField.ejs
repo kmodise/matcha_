@@ -1,39 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<%
-var i = 0; while (users[i]) {
-
-i++;
-
-}
-
-%>
-
 <body>
     <% include ../extras/navbar.ejs %>
-
-
+<div>
+  <% var i = 0; while (users[i]) { %>
   <div>
-
-    <div>
+    <div onclick="location.href='<%='/user_profile/' + users[i].id%>'">
+      <img src="<%= users[i].profileImg %>">
       <div>
-        <div>
-          <% var i = 0; while (users[i]) { %>
-          <div>
-            <div onclick="location.href='<%='/user_profile/' + users[i].id%>'">
-              <img src="<%= users[i].profileImg %>">
-              <div>
-                <h5><%=users[i].firstname%> <%= users[i].lastname%><%=users[i].age%> years old</h5>
-                <p><%= users[i].bio%></p>
-              </div>
-            </div>
-          </div>
-        <% i++; } %>
+        <h3><%=users[i].username%><br /> <%=users[i].age%> years old</h3>
+        <p><%= users[i].bio%></p>
       </div>
     </div>
   </div>
-
+<% i++; } %>
+</div>
   <% include ../extras/footer.ejs %>
 </body>
 

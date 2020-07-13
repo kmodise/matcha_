@@ -1,4 +1,4 @@
-function userprofilevalidate(result) {
+function isActivated(result) {
     var i = 0;
     while (result[i]) {
         if ((result[i].activate !== 1))
@@ -9,62 +9,63 @@ function userprofilevalidate(result) {
             result[i].valid = 1;
         i++;
     }
-    result = result.filter(function (val, a, result) { return (val.valid == 1) })
+    result = result.filter((val) => {
+        return (val.valid == 1)
+    })
     return (result);
 }
 
-
-function    blocked(result, myid, callback)
-{
-    conn.query('SELECT * FROM `block` WHERE user_id = ?', [myid], function(err, block) { if (err) throw err;
+function isBlocked(result, myid, callback) {
+    console.log(myid);
+    conn.query('SELECT * FROM `block` WHERE user_id = ?', [myid], (err, block) => {
+        if (err) throw err;
         var i = 0;
-        if (block.length > 0)
-        {
-            while (block[i])
-            {
-                result = result.filter(function(val, a, result){return (val.id != block[i].secondUsrId)})
+        if (block.length > 0) {
+            while (block[i]) {
+                result = result.filter((val) => { return (val.id != block[i].secondUsrId) })
                 i++;
             }
         }
         return callback(result)
     })
 }
-function finder(gender, orientation1, orientation2, myid, callback) {
-    sql = 'SELECT * FROM users WHERE orientation = ? AND gender = ? AND id <> ?';
+function lookFor(gender, orientation1, orientation2, myid, callback) {
+    sql = 'SELECT * FROM users WHERE orientation = ? AND gender = ? AND id != ?';
     vars = [orientation1, gender, myid]
-    conn.query(sql, vars, function (err, result) {
+    conn.query(sql, vars, (err, result) => {
         if (err) throw err
-        sql = 'SELECT * FROM users WHERE orientation = ? AND gender = ? AND id <> ?';
+        sql = 'SELECT * FROM users WHERE orientation = ? AND gender = ? AND id != ?';
         vars = [orientation2, gender, myid]
-        conn.query(sql, vars, function (err, result2) {
+        conn.query(sql, vars, (err, result2) => {
             if (err) throw err
             result = result.concat(result2)
-            blocked(result, myid, function(result){ return callback(result); });
+            isBlocked(result, myid, (result) => { return callback(result); });
         })
     })
 }
-////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-function orientation(orientation, gender, callback) {
+
+function sexPreference(orientation, gender, callback) {
     if (orientation == "Heterosexual") {
-        if (gender == "Man"){
-            finder('Woman', 'Heterosexual', 'Bisexual', req.session.profile.id, function (result) { return callback(result) })
+        if (gender == "Man") {
+            lookFor('Woman', 'Heterosexual', 'Bisexual', req.session.profile.id, (result) => { return callback(result) })
         }
-        else if (gender == "Woman"){
-            finder('Man', 'Heterosexual', 'Bisexual', req.session.profile.id, function (result) { return callback(result) })}
+        else if (gender == "Woman") {
+            lookFor('Man', 'Heterosexual', 'Bisexual', req.session.profile.id, (result) => { return callback(result) })
+        }
     }
 
     else if (orientation == 'Bisexual') {
         if (gender == 'Man') {
-            finder('Man', 'Homosexual', 'Bisexual', req.session.profile.id, function (result1) {
-                finder('Woman', 'Heterosexual', 'Bisexual', req.session.profile.id, function (result2) {
+            lookFor('Man', 'Homosexual', 'Bisexual', req.session.profile.id, (result1) => {
+                lookFor('Woman', 'Heterosexual', 'Bisexual', req.session.profile.id, (result2) => {
                     result = result1.concat(result2)
                     return callback(result);
                 })
             })
         }
         else if (gender == 'Woman') {
-            finder('Woman', 'Homosexual', 'Bisexual', req.session.profile.id, function (result1) {
-                finder('Man', 'Heterosexual', 'Bisexual', req.session.profile.id, function (result2) {
+            lookFor('Woman', 'Homosexual', 'Bisexual', req.session.profile.id, (result1) => {
+                lookFor('Man', 'Heterosexual', 'Bisexual', req.session.profile.id, (result2) => {
                     result = result1.concat(result2)
                     return callback(result);
                 })
@@ -74,16 +75,17 @@ function orientation(orientation, gender, callback) {
 
     else if (orientation == 'Homosexual') {
         if (gender == 'Man') {
-            finder('Man', 'Homosexual', 'Bisexual', req.session.profile.id, function (result) { return callback(result); })
+            lookFor('Man', 'Homosexual', 'Bisexual', req.session.profile.id, (result) => { return callback(result); })
         }
         else if (gender == 'Woman') {
-            finder('Woman', 'Homosexual', 'Bisexual', req.session.profile.id, function (result) { return callback(result); })
+            lookFor('Woman', 'Homosexual', 'Bisexual', req.session.profile.id, (result) => { return callback(result); })
         }
     }
 }
 
- orientation(req.session.profile.orientation, req.session.profile.gender, (result) => { userprofilevalidate(result)
-        
-            res.render('pages/loveField', {profile: req.session.profile, users: result, notif: notifications })
-        
-    })
+sexPreference(req.session.profile.orientation, req.session.profile.gender, (result) => {
+    isActivated(result)
+
+    res.render('pages/loveField', { profile: req.session.profile, users: result, notif: notifications })
+
+})

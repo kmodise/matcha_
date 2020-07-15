@@ -6,6 +6,9 @@
 
     <% include ../extras/navbar.ejs %>
     <div>
+        <% if (typeof error !== 'undefined' && error && error !== 'none') { %>
+            <h1><%=error%></h1>
+            <% } %>
         <h2>People who like you</h2>
         <hr>
         <% if (like != 'none') {

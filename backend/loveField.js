@@ -82,10 +82,19 @@ function sexPreference(orientation, gender, callback) {
         }
     }
 }
+function compleAccount(req, res, profile) {
 
-sexPreference(req.session.profile.orientation, req.session.profile.gender, (result) => {
+    if (!profile.gender || !profile.bio || !profile.orientation || profile.age <= 0 || profile.profileImg == '/img/default.jpg') {
+        res.render('pages/profile', { notif: notifications, error: 'Complete profile first', profile: profile, like: 'none', visit: 'none' })
+        return 0
+    }
+    else
+        return 1
+}
+if (!compleAccount(req, res, req.session.profile) == 0) {
+    sexPreference(req.session.profile.orientation, req.session.profile.gender, (result) => {
+    
     isActivated(result)
-
     res.render('pages/loveField', { profile: req.session.profile, users: result, notif: notifications })
-
 })
+}

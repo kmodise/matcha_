@@ -1,7 +1,7 @@
-function isMatch(myId, callback) {
-    conn.query('SELECT * FROM likes WHERE user_id = ?', [myId], (err, row1) => {
+function isMatch(user_id, callback) {
+    conn.query('SELECT * FROM likes WHERE user_id = ?', [user_id], (err, row1) => {
         if (err) throw err
-        conn.query('SELECT * FROM likes WHERE secondUsrId = ?', [myId], (err, row2) => {
+        conn.query('SELECT * FROM likes WHERE secondUsrId = ?', [user_id], (err, row2) => {
             if (err) throw err
             if (row1.length == 0 || row2.length == 0)
                 return callback('none');
@@ -10,7 +10,7 @@ function isMatch(myId, callback) {
             while (row1[a]) {
                 var b = 0;
                 while (row2[b]) {
-                    if (row1[a].secondUsrId == row2[b].myId) {
+                    if (row1[a].secondUsrId == row2[b].user_id) {
                         id[i] = row1[a].secondUsrId;
                         i++;
                     }

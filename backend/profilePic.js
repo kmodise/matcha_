@@ -17,7 +17,7 @@ function uploadPic(){
             console.log('image server problem');
             return ;
         }
-        
+
         var name = 'profileImg';
         var dir =  __dirname + '/public/img/users/' + req.session.profile.id;
         

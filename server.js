@@ -21,7 +21,8 @@ app.set('view engine', 'ejs')
 var conn = mysql.createConnection({
     host: "127.0.0.1",
     user: "root",
-    password: "qwerty"
+    password: "qwerty",
+    socketPath: "/goinfre/kmodise/Desktop/MAMP/mysql/tmp/mysql.sock"
 })
 
 conn.connect( (err) => {
